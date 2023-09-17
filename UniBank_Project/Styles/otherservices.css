@@ -1,0 +1,53 @@
+:root {
+    --customOrange:#FE6400;
+    --customGray:#FAFAFA;
+}
+
+
+.other_services {
+    .container {
+        .services_title {
+            color:var(--customOrange) ;
+            font-weight: 700;
+            font-size: 35px;
+            padding: 40px 0px;
+        }
+        .services_main_container {
+            .service_container  {
+                padding: 10px;
+                .service {
+                    transition: 0.4s all;
+                    display: flex;
+                    align-items: center;
+                    height: 400px;
+                    flex-direction: column;
+                    gap: 20px;
+                    border-radius: 20px;
+                    justify-content: center;
+                    padding: 30px;
+                    background-color: var(--customGray);
+                    &:hover {
+                        background-color: var(--customOrange);
+                        cursor: pointer;
+                        color:white;
+                        .service_icon {
+                        color:white;
+                        }
+                    }
+                    .service_icon {
+                        display: flex; transition: 0.4s all;
+                        justify-content: center;
+                        padding-bottom: 20px;
+                        color:var(--customOrange);
+                        font-size: 55px;
+                    }
+                    .service_title {
+                        font-weight: 700;
+                        font-size: 20px;
+                    }
+
+                }
+            }
+        }
+    }
+}

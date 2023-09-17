@@ -1,0 +1,9 @@
+.service_network {
+    .container {
+        .title {
+            font-size: 34px;
+            font-weight: 700;
+            color:#FE6400;
+        }
+    }
+}

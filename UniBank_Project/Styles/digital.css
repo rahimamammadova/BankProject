@@ -1,0 +1,64 @@
+:root {
+    --customOrange:#FE6400;
+    --customGray:#FAFAFA;
+}
+
+
+.digital_banking {
+    .container {
+        .digital_title {
+            color:var(--customOrange);
+            font-size: 30px;
+            font-weight: 700;
+            padding:40px 0px;
+        }
+        .row {
+            .card_container {
+                padding: 10px;
+                > a {
+                    text-decoration: none;
+                    color: black;
+                    .card {
+                        background-color: var(--customGray);
+                        border: none;
+                        display: flex;
+                        flex-direction: column;
+                        padding: 20px;
+                        border-radius: 10px;
+                        transition: 0.3s all;
+                        cursor:pointer;
+                        gap: 5px;
+                        height: 270px;
+                        &:hover {
+                            background-color: var(--customOrange); 
+                            color:White;
+                            .icon {
+                                color:white;
+                            }   
+                        }
+                        .icon {
+                            font-size: 55px;
+                            color:var(--customOrange);
+                            text-align: center;
+                            transition: 0.3s all;
+                        }
+                        .card-body {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 5px;
+                            .card-title {
+                                font-weight: 700;
+                                font-size: 21px;
+                                text-align: center;
+                            }
+                            .card-text {
+                                font-size: 16px;
+                                text-align: center;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

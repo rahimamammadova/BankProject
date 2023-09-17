@@ -1,0 +1,151 @@
+:root {
+    --customOrange:#FE6400;
+    --customGray:#FAFAFA;
+}
+
+
+.loans {
+    .container {
+        .target {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: var(--customOrange);
+            gap: 10px;
+            color:white;
+            border-radius: 30px;
+            .target_icon {
+                font-size: 50px;
+            }
+            .text {
+                line-height: 19px;
+                font-weight: 600;
+                margin: 0;
+            }
+        }
+        .features_container{
+            .row {
+                .feature_container {
+                    padding: 10px;
+                    border-radius: 13px;
+                    .feature {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        height: 250px;
+                        border-radius: 13px;
+                        background-color: var(--customGray);
+                        color:var(--customOrange);
+                        cursor: pointer;
+                        transition: 0.3s all ;
+                        &:hover {
+                            background-color: var(--customOrange);
+                            color:white;
+                            .feature_title {
+                                text-align: center;
+                                font-weight: 600;
+                                color:white;
+                                font-size: 21px;
+                            }
+                            .feature_text {
+                                text-align: center;
+                                color:white;
+    
+                            }
+                        }
+                        .icon {
+                            font-size: 43px;
+                            text-align: center;
+                        }
+                        .feature_title {
+                            text-align: center;
+                            font-weight: 600; transition: 0.3s all ;
+                            color:black;
+                            font-size: 21px;
+                        }
+                        .feature_text {
+                            text-align: center;
+                            color:black;
+                            transition: 0.3s all ;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@media (max-width:993px) {
+    
+.loans {
+    .container {
+        .target {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: var(--customOrange);
+            gap: 10px;
+            color:white;
+            border-radius: 30px;
+            .target_icon {
+                font-size: 50px;
+            }
+            .text {
+                line-height: 19px;
+                font-weight: 600;
+                margin: 0;
+            }
+        }
+        .features_container{
+            .row {
+                .feature_container {
+                    padding: 10px;
+                    border-radius: 13px;
+                    .feature {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        height: 160px;
+                        border-radius: 13px;
+                        background-color: var(--customGray);
+                        color:var(--customOrange);
+                        cursor: pointer;
+                        transition: 0.3s all ;
+                        &:hover {
+                            background-color: var(--customOrange);
+                            color:white;
+                            .feature_title {
+                                text-align: center;
+                                font-weight: 600;
+                                color:white;
+                                font-size: 21px;
+                            }
+                            .feature_text {
+                                text-align: center;
+                                color:white;
+    
+                            }
+                        }
+                        .icon {
+                            font-size: 43px;
+                            text-align: center;
+                        }
+                        .feature_title {
+                            text-align: center;
+                            font-weight: 600; transition: 0.3s all ;
+                            color:black;
+                            font-size: 21px;
+                        }
+                        .feature_text {
+                            text-align: center;
+                            color:black;
+                            transition: 0.3s all ;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+}

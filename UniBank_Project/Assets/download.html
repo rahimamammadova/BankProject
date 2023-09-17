@@ -1,0 +1,3136 @@
+
+
+
+
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js ie6 oldie" lang="en"><![endif]-->
+<!--[if IE 7]><html class="no-js ie7 oldie" lang="en"><![endif]-->
+<!--[if IE 8]><html class="no-js ie8 oldie" lang="en"><![endif]-->
+<!--[if IE 9]><html class="no-js ie9" lang="en"><![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js" lang="az">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>Elektron Hökumət Portalı</title>
+
+        <meta name="title" content="Elektron Hökumət Portalı" />
+        <meta name="description" content="Azərbaycan Respublikasının Milli Elektron Hökumət Portalı" />
+        <meta name="keywords" content="elektron hökumət,elektron xidmətlər,e-government,egov,elektron dövlət,elektron hokumat, asanlogin" />
+    <meta name="viewport" content="width=device-width">
+
+
+    <meta name="author" content="IDDA" />
+
+    <!-- The Open Graph protocol -->
+    <meta property="fb:app_id" content="302497813600069" />
+    <meta property="og:url" content="https://www.e-gov.az/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Elektron H&#246;kumət Portalı" />
+    <meta property="og:description" content="Elektron H&#246;kumət Portalı" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://e-gov.az/en/">
+    <meta property="twitter:title" content="E-Government Portal">
+    <meta property="twitter:description" content="National E-government portal of the Republic of Azerbaijan">
+    <meta property="twitter:image" content="https://e-gov.az/meta-image.png">
+
+    <!--  Mobile Viewport Fix -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="/ContentNew/Pics/favicon.ico" />
+
+    <!-- CSS -->
+    <!--fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="/ContentNew/static/fonts.googleapis.com_css2_family_Inter.css" rel="stylesheet">
+    <!--fonts-->
+    <link rel="stylesheet" href="/ContentNew/Js/swiper/swiper.min.css">
+    <script src="/ContentNew/Js/swiper/swiper-bundle.min.js" type="module"></script>
+    <link rel="stylesheet" href="/ContentNew/assets/e-participation.fbb4cf83.css" />
+    <link rel="stylesheet" href="/ContentNew/assets/e-participation.2c5fe3d4.css" />
+    <link rel="stylesheet" href="/ContentNew/assets/index.ea1b0df6.css" />
+    <link href="/ContentNew/static/jquery-toast.min.css" rel="stylesheet">
+    <script src="/jquery-ui-1.11.0/jquery-1.9.1.min.js"></script>
+    <script src="/ContentNew/Js/autoComplete.min.js" type="module"></script>
+    <script src="/ContentNew/Js/asanlogin-db-main.js?v=1.6"></script>
+
+    <script src="/ContentNew/Js/typeahead.bundle.js"></script>
+    <script src="/ContentNew/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/ContentNew/bootstrap/js/bootstrap-dialog.min.js"></script>
+    <script src="/ContentNew/Js/jquery.cookie.js"></script>
+    <script src="/ContentNew/Js/jquery.ThreeDots.min.js"></script>
+    <script src="/ContentNew/static/jquery-toast.min.js"></script>
+    <script src="/ContentNew/static/ajax_libs_jquery.mask.min.js"></script>
+
+
+
+    <!-- Google Fonts embed code -->
+    <script type="text/javascript">
+
+        function getSelectionText() {
+            highlightedText = "";
+            if (window.getSelection) {
+                highlightedText = window.getSelection().toString();
+            } else if (document.selection && document.selection.type != "Control") {
+                highlightedText = document.selection.createRange().text;
+            }
+            return highlightedText;
+        }
+
+        function KeyPress(e) {
+            var evtobj = window.event ? event : e
+            if (evtobj.keyCode == 13 && evtobj.ctrlKey) {
+                //alert("Ctrl+Enter");
+                //alert(getSelectionText());
+
+                if (getSelectionText().trim().length > 0) {
+                    $('#frmErrorTextModalBody')[0].reset();
+                    $("#taErrorSelectedText").val(getSelectionText().trim());
+                    $("#myErrorTextModal").modal("show");
+                }
+            }
+        }
+
+        document.onkeydown = KeyPress;
+
+
+        $(document).ready(function () {
+
+
+            $(".lang").removeClass("bg-main-100 text-white p-2");
+            $(".lang[lang='az']").addClass("bg-main-100 text-white p-2");
+
+            $("#languageSelect").change(function () {
+                var selectedValue = $(this).val();
+                window.location.href = selectedValue
+            })
+
+
+            $("#min").click(function () {
+
+                $('.online-content').fadeOut();
+                //$('.online-content').css('right','-500px');
+                $('.online-btn').show();
+            });
+
+            var activeCert = '';
+
+            $("#slcCerts").val(activeCert);
+            $("#width_tmp").html($('#slcCerts option:selected').text());
+            //$("#slcCerts").width($("#width_tmp").width() + 30);
+
+
+            $('#slcCerts').change(function () {
+
+                $("#width_tmp").html($('#slcCerts option:selected').text());
+                $(this).width($("#width_tmp").width() + 30);
+
+                $.ajax(
+                    {
+                        url: "/az/login/JSChangeCertificate/",
+                        type: 'POST',
+                        dataType: 'json',
+                        data:
+                        {
+                            id: $(this).val()
+                        },
+                        success: function (result) {
+                            if (result.data == "OK") {
+                                location.reload();
+                            }
+                        }
+                    });
+
+            });
+
+            $("#btnSendErrorTextModal").click(function () {
+                $.ajax(
+                    {
+                        url: "/az/home/JSAddSelectedError/",
+                        type: 'POST',
+                        dataType: 'json',
+                        data:{
+                            URL: $("#txtErrorURL").val(),
+                            SelectedText: $("#taErrorSelectedText").val(),
+                            Message: $("#taErrorMessage").val()
+                        },
+                        success: function (result) {
+                            if (result.message == "OK") {
+                                $('#frmErrorTextModalBody')[0].reset();
+                                $("#myErrorTextModal").modal("hide");
+
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_SUCCESS,
+                                    title: 'Məlumat',
+                                    message: "Xəta g&#246;ndərildi"
+                                });
+                            }
+                            else {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_DANGER,
+                                    title: 'Xəta',
+                                    message: result.message,
+                                    buttons: [{
+                                        label: 'Bağla',
+                                        cssClass: 'whitespace-nowrap rounded bg-gray-400 px-6 py-2 text-center text-white me-2',
+                                        action: function (dialogItself) {
+                                            dialogItself.close();
+                                        }
+                                    }]
+                                });
+                            }
+                        }
+                    });
+            });
+
+
+            $("body").delegate("#ulGroupList li a.aDeleteMyTopic", "click", function () {
+
+                var myTopicID = $(this).closest("li").attr("mytopicid");
+                var topicName;
+
+                $(this).closest("li").find("span.icons").hide();
+
+                $.ajax(
+                    {
+                        url: "/az/services/JSGetTopicName/",
+                        type: 'POST',
+                        dataType: 'json',
+                        async: false,
+                        data:
+                        {
+                            topicId: myTopicID
+                        },
+                        success: function (result) {
+                            if (result.message == "OK") {
+                                topicName = result.name;
+                            }
+                            else {
+                                alert(result.message);
+                            }
+                        }
+                    });
+
+
+                BootstrapDialog.show({
+                    title: 'Xəbərdarlıq',
+                    type: BootstrapDialog.TYPE_DANGER,
+                    message: 'az' == 'en' ? ('Do you want delete <span style="font-weight:bold; font-size: 16px;">"' + topicName + '"</span> service group?') : ('Siz <span style="font-weight:bold; font-size: 16px;">"' + topicName + '"</span> xidmət qrupunu silmək istəyirsiniz ?'),
+                    buttons: [{
+                        label: 'Xeyr',
+                        cssClass: 'whitespace-nowrap rounded bg-gray-400 px-6 py-2 text-center text-white me-2',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    }, {
+                        label: 'Bəli',
+                        cssClass: 'whitespace-nowrap rounded bg-main-300 px-6 py-2 text-center text-white',
+                        action: function (dialog) {
+                            $.ajax(
+                                {
+                                    url: "/az/services/JSDeleteMyTopic/",
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    async: false,
+                                    data:
+                                    {
+                                        topicId: myTopicID
+                                    },
+                                    success: function (result) {
+                                        if (result.message == "OK") {
+                                            if (result.id != '') {
+                                                if (result.id == -1) {
+                                                    window.location.assign('/az/services/index');
+                                                }
+                                                else {
+                                                    window.location.assign('/az/services/mytopic/' + result.id);
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            BootstrapDialog.show({
+                                                type: BootstrapDialog.TYPE_DANGER,
+                                                title: 'Xəta',
+                                                message: result.message,
+                                                buttons: [{
+                                                    label: 'Bağla',
+                                                    cssClass: 'whitespace-nowrap rounded bg-gray-400 px-6 py-2 text-center text-white me-2',
+                                                    action: function (dialogItself) {
+                                                        dialogItself.close();
+                                                    }
+                                                }]
+                                            });
+                                        }
+                                    }
+                                });
+                        }
+                    }]
+                });
+
+
+            });
+
+
+
+            $("body").delegate("#aGroupSaveChange", "click", function () {
+                var ths = $(this);
+                var myTopicID = ths.closest("li").attr("mytopicid");
+                if ($("#txtEditGroupName").val().length > 2) {
+
+                    $.ajax(
+                    {
+                        url: "/az/services/JSEditMyTopicName/",
+                        type: 'POST',
+                        dataType: 'json',
+                        data:
+                        {
+                            name: $("#txtEditGroupName").val(),
+                            topicId: myTopicID
+                        },
+                        success: function (result) {
+                            if (result.data == "OK") {
+
+                                ths.closest("li").removeClass("editedMyTopic");
+                                ths.closest("li").children().show();
+                                $("span.serv-arrow").show();
+                                $("#aAddGroup").closest("li").show();
+
+                                ths.closest("li").find(".icons").hide();
+
+                                ths.closest("li").find("a:first").text($("#txtEditGroupName").val());
+
+                                ths.closest("li").find("div.divForTopicEdit").remove();
+
+                                $('.manage-folders').removeAttr('style');
+                            }
+                            else {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_DANGER,
+                                    title: 'Xəta',
+                                    message: result.data,
+                                    buttons: [{
+                                        label: 'Bağla',
+                                        cssClass: 'whitespace-nowrap rounded bg-gray-400 px-6 py-2 text-center text-white me-2',
+                                        action: function (dialogItself) {
+                                            dialogItself.close();
+                                        }
+                                    }]
+                                });
+                            }
+                        }
+                    });
+
+                }
+                else {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_DANGER,
+                        title: 'Xəta',
+                        message: 'Qrupunun adı ən azı 3 simvoldan ibarət olmalıdır',
+                        buttons: [{
+                            label: 'Bağla',
+                            cssClass: 'whitespace-nowrap rounded bg-gray-400 px-6 py-2 text-center text-white me-2',
+                            action: function (dialogItself) {
+                                dialogItself.close();
+                            }
+                        }]
+                    });
+                }
+            });
+
+
+            $("body").delegate("#ulGroupList li a.aEditMyTopic", "click", function () {
+                var myTopicID = $(this).closest("li").attr("mytopicid");
+
+                $("#aAddGroup").closest("li").hide();
+                $("span.serv-arrow").hide();
+                $(this).closest("li").children().hide();
+                $(this).closest("li").append('<div class="manage-folders divForTopicEdit" style="margin: 5px 0 0 -12px; padding: 0;"><a class="new-folder aCancelEdit" title="Ləğv et" style="cursor: pointer; margin-right: 8px;"> <img src="/ContentNew/Pics/plus.png" title="Ləğv et" class="imgCancel"> </a><input id="txtEditGroupName" type="text"> <a id="aGroupSaveChange" class="folder-ok"><img src="/ContentNew/Pics/serv-ok.png" title="Yadda saxla" style="cursor:pointer;"></a></div>');
+                $(this).closest("li").addClass("editedMyTopic");
+
+                $.ajax(
+                        {
+                            url: "/az/services/JSGetTopicName/",
+                            type: 'POST',
+                            dataType: 'json',
+                            data:
+                            {
+                                topicId: myTopicID
+                            },
+                            success: function (result) {
+                                if (result.message == "OK") {
+                                    $("#txtEditGroupName").val(result.name);
+                                    $('.manage-folders').css('display', 'inline-block');
+                                }
+                                else {
+                                    alert("Sistemə daxil olmalısınız")
+                                }
+                            }
+                        });
+            });
+
+
+
+            var keywords = new Bloodhound({
+                datumTokenizer: function (datum) {
+                    return Bloodhound.tokenizers.whitespace(datum.value);
+                },
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                limit: 100,
+                remote: {
+                    url: '/az/Home/AutoCompleteNew?search=%QUERY',
+                    filter: function (keywords) {
+                        // Map the remote source JSON array to a JavaScript object array
+                        return $.map(keywords, function (keyword) {
+                            if (keyword.additional == '') {
+                                return {
+                                    label: keyword.title,
+                                    value: keyword.title
+                                };
+                            }
+                            else {
+                                return {
+                                    label: '<span style="color:gray; ">' + keyword.title + '</span>' + '<br/><span style="font-size:14px; font-style:italic;">' + keyword.additional + '</span>',
+                                    value: keyword.title
+                                };
+                            }
+                        });
+                    }
+                }
+            });
+
+            keywords.initialize();
+
+            $('input#keywords').typeahead(
+                {
+
+                    minLength: 3,
+
+                }, {
+                    name: 'keywords',
+                    displayKey: 'value',
+                    source: keywords.ttAdapter(),
+
+                    templates: {
+
+                        suggestion: function (item) { return '<p style="white-space: normal;">' + item.label + '</p>'; }
+                    }
+            }).on('typeahead:selected', function (obj, datum) {
+
+
+                    $("#frmSearch button").click();
+
+            });
+            var certificates = $('#certificatesContainer').find('.certificate-item')
+            certificates.each((i, cert) => {
+                $(cert).click(function () {
+                    if (activeCert !== cert.dataset.value) {
+                        $.ajax({
+                                url: "/az/login/JSChangeCertificate/",
+                                type: 'POST',
+                                dataType: 'json',
+                                data:
+                                {
+                                    id: cert.dataset.value
+                                },
+                                success: function (result) {
+                                    if (result.data == "OK") {
+                                        location.reload();
+                                    }
+                                }
+                        });
+
+                    }
+                })
+                if (cert.dataset.value === activeCert) {
+                    $(cert).css("color", "#1244b5")
+                    $(cert).css("border-color", "#1244b5")
+                    $(cert).css("font-weight", "500")
+                }
+            })
+
+            $(document).on('click', '.search-result-item', function () {
+
+                $('#frmSearch').submit();
+            });
+
+            var minValue = '';
+            var pgLang='az';
+            if (pgLang.includes("az")) {
+                minValue = ' dəq';
+            }
+            else {
+                minValue = ' min';
+            }
+
+            $.ajax(
+            {
+                url: "/az/Statistic/AnalyticsReporting",
+                type: 'GET',
+                success: function (result)
+                {
+                    $("#new-users").text(result.NewUserCount);
+                  $("#screen-page-view").text(result.ScreenPageViewsCount);
+                    $("#average-session").text(Math.round((result.AverageSessionDuration / 60)*100)/100 + minValue)
+			    }
+		    });
+
+        });
+
+        //(function () {
+        //    var link_element = document.createElement("link"),
+        //        s = document.getElementsByTagName("script")[0];
+        //    if (window.location.protocol !== "http:" && window.location.protocol !== "https:") {
+        //        link_element.href = "http:";
+        //    }
+        //    link_element.href += "//fonts.googleapis.com/css?family=Noto+Sans:400italic,400,700italic,700";
+        //    link_element.rel = "stylesheet";
+        //    link_element.type = "text/css";
+        //    s.parentNode.insertBefore(link_element, s);
+        //})();
+    </script>
+
+
+
+    
+
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '283658815773687');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+             src="https://www.facebook.com/tr?id=283658815773687&ev=PageView&noscript=1" />
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-PFXVJD4');</script>
+    <!-- End Google Tag Manager -->
+
+    <style>
+
+        .h-4 {
+            height: 1rem;
+        }
+
+        .w-4 {
+            width: 1rem;
+        }
+
+        .content-between {
+            align-content: space-between;
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr))
+        }
+
+        .grid-cols-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr))
+        }
+
+        .grid-cols-5 {
+            grid-template-columns: repeat(5, minmax(0, 1fr))
+        }
+
+        .grid-cols-6 {
+            grid-template-columns: repeat(6, minmax(0, 1fr))
+        }
+
+        .col-span-3 {
+            grid-column: span 3 / span 3
+        }
+
+        .border-main {
+            --tw-border-opacity: 1;
+            border-color: var(--color-main)
+        }
+
+        .w-6, .h-6 {
+            width: 1.5rem;
+        }
+
+        .auto-cols-max {
+            grid-auto-columns: max-content;
+        }
+
+        .grid-flow-col {
+            grid-auto-flow: column;
+        }
+
+        .row-auto {
+            grid-row: auto;
+        }
+
+        .pl-10 {
+            padding-left: 2.5rem; /* 40px */
+        }
+
+        .active .arrow {
+            transform: rotate(180deg);
+        }
+
+        .justify-end {
+            justify-content: flex-end
+        }
+
+        .me-2 {
+            margin-right: 0.5rem
+        }
+
+        .me-5 {
+            margin-right: 1.25rem
+        }
+
+        .mb-2 {
+            margin-bottom: 0.75rem
+        }
+
+        .text-primary {
+            color: #0F1D40;
+        }
+
+        .table-auto {
+            table-layout: auto;
+        }
+
+        .border-collapse {
+            border-collapse: collapse;
+        }
+
+        table td {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        ul.docs li {
+            border: 3px solid #ededed;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 0 0 20px 0;
+            color: #2b2b2b;
+            font-size: 15px;
+        }
+
+        .doc-btns {
+            margin: 20px 0 0 0;
+        }
+
+            .doc-btns a {
+                padding: 5px 10px;
+                display: inline-block;
+                margin: 0 10px 0 0;
+                border-radius: 10px;
+                text-decoration: none;
+                font-size: 13px;
+                font-family: Gotham;
+            }
+
+                .doc-btns a:hover {
+                    text-decoration: none;
+                }
+
+                .doc-btns a.pdf {
+                    border: 1px solid #ec310c;
+                    color: #ec310c;
+                }
+
+                    .doc-btns a.pdf:hover {
+                        background: #ec310c;
+                        color: #fff;
+                    }
+
+                .doc-btns a.docx {
+                    border: 1px solid #0775dc;
+                    color: #0775dc;
+                }
+
+                    .doc-btns a.docx:hover {
+                        background: #0775dc;
+                        color: #fff;
+                    }
+
+        .page-text {
+            color: #454545;
+            font-size: 16px;
+        }
+
+            .page-text a.spec-link {
+                margin: 8px 0;
+                padding: 5px 15px;
+                display: inline-block;
+                background: #15ace2;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 10px;
+                font-size: 15px;
+            }
+        /*.bootstrap-dialog:after {
+            content: '';
+            background-color: #e2e2e2;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }*/
+        .bg-gray-400 {
+            background-color: #c3c3c3
+        }
+
+        .grecaptcha-badge {
+            visibility: hidden;
+        }
+
+        .menu-button {
+            width: 48px;
+            height: 48px;
+        }
+
+        @media (min-width: 640px) {
+            .sm\:col-span-1 {
+                grid-column: span 1 / span 1;
+            }
+        }
+
+        .footer-company {
+            max-width: 23%;
+        }
+
+        @media (max-width: 1279px) {
+            .footer-company {
+                max-width: 90%;
+            }
+        }
+    </style>
+
+
+</head>
+
+
+
+<body style="">
+
+    <!-- Start of HubSpot Embed Code -->
+
+	<script type="text/javascript" id="hs-script-loader" async defer src="//js-na1.hs-scripts.com/39780073.js?lang=az"></script>
+
+    <!-- End of HubSpot Embed Code -->
+
+<style>
+        .certificate-item {
+            border: 1px solid #9b9494
+        }
+
+        .shadow-3xl {
+            --tw-shadow: 0 15px 57px -2px rgb(0 0 0 / .25);
+            --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+        }
+
+        .py-3 {
+            padding-top: .75rem;
+            padding-bottom: .75rem
+        }
+        .search-results__item[aria-selected="true"] {
+            background: #e5e7eb;
+        }
+
+        mark {
+            background-color: transparent;
+            color: black;
+            font-weight: bold;
+        }
+    @media (max-width: 1279px) {
+        .login-button-main {
+            display: none;
+        }
+    }
+   
+    </style>
+    <main class="overflow-x-hidden">
+            <section class="bg-gray-100">
+                <div class="section-container flex items-center justify-between gap-4 py-3 text-sm">
+                    <p class="text-gray-500">
+                        Əvvəlki versiyaya keçid edə bilərsiniz
+                    </p>
+                    <a href="https://old.e-gov.az" target="_blank" class="flex items-center gap-2 font-medium text-main">
+                        Əvvəlki versiyaya keçid et
+                        <img class="max-w-none rotate-180 transform" alt="" width="16" height="16" src="/ContentNew/assets/arrow-blue_ZLfgBc.svg" loading="lazy" decoding="async">
+                    </a>
+                </div>
+            </section>
+
+        <header class="bg-white py-4">
+            <div class="section-container flex items-center justify-between gap-10">
+                <div class="flex items-center gap-5">
+                    <a href="/az">
+                        <img class="max-w-none xl:h-[62px] xl:w-[167px]" alt="logotype" width="92" height="34" src="/ContentNew/assets/logo_1u4IDU.svg" loading="lazy" decoding="async">
+                    </a>
+                    <a href="#" lang="az" class="lang text-sm uppercase tracking-wider xl:block rounded">
+                        az
+                    </a>
+                    <a href="/en" lang="en" class="lang text-sm uppercase tracking-wider xl:block rounded">
+                        en
+                    </a>
+                </div>
+                <div class="flex justify-end items-center gap-8 w-full">
+                    <div class="hidden items-center gap-8 focus-within:w-full xl:flex">
+
+                        <div class="relative w-full">
+                            <form method="get" action="/az/home/search" id="frmSearch">
+                                <label class="sr-only" for="search">Search</label>
+
+                                <input id="search"  name="q" type="text" placeholder="Axtarış" autocomplete="off"
+                                       class="block w-full rounded-4xl border-0 px-6 py-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600">
+                                <ul class="absolute z-20 mt-2 hidden max-h-96 w-full flex-col divide-y overflow-x-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-inset ring-gray-300" id="search-results"></ul>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="">
+                            <a href="https://asanlogin.my.gov.az/auth?origin=https://e-gov.az"
+                               class="whitespace-nowrap rounded bg-main px-12 py-2 uppercase text-white login-button-main">
+                                PORTALA GİRİŞ
+                            </a>
+                </div>
+            </div>
+            <div class="ml-auto xl:hidden">
+                <button class="rounded-xl bg-main-100 menu-button flex justify-center items-center" onclick="handleToggleMenu()">
+                    <img alt="" width="24" height="24" src="/ContentNew/assets/burger_aDAH4.svg" loading="lazy" decoding="async">
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <script>
+        $(document).ready(function () {
+            const origin = window.location.origin;
+            const lang = 'az';
+            const searchEl = document.getElementById("search");
+            searchEl.addEventListener('keydown', function (e) {
+                if (e.key === "Enter") {
+                    $('#frmSearch').submit()
+                }
+            })
+            const autoCompleteJS = new autoComplete({
+                selector: "#search",
+                debounce: 600,
+                data: {
+                    src: async function (query) {
+                        if (query.length < 3) return;
+                        try {
+                            const source = await fetch(
+                                `${origin}/${lang}/Home/AutoCompleteNew?search=${query}`
+                            );
+                            return await source.json();
+                        } catch (error) {
+                            return error;
+                        }
+                    },
+                    keys: ["title", "type", "additional"],
+                    cache: false,
+                },
+                resultsList: {
+                    noResults: true,
+                    maxResults: 15,
+                    tabSelect: true,
+                    id: "search-results",
+                    class:
+                        "absolute z-20 mt-2 max-h-96 w-full flex-col divide-y overflow-x-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-inset ring-gray-300",
+                },
+                resultItem: {
+                    element: (item, data) => {
+                        item.className =
+                            "flex flex-col cursor-pointer px-4 py-2 hover:bg-gray-200 search-results__item text-gray-700 text-ssm";
+                        if (data.key === "title") {
+                            item.innerHTML = `<span>${data.match}</span>`;
+                        } else {
+                            item.innerHTML = `<span class="text-gray-500">${data.value.title}</span><span class="text-xs">${data.match}</span>`;
+                        }
+                    },
+                    highlight: true,
+                },
+                events: {
+                    input: {
+                        focus: () => {
+                            if (autoCompleteJS.input.value.length) autoCompleteJS.start();
+                        },
+                    },
+                },
+            });
+
+
+            autoCompleteJS.input.addEventListener("selection", function (event) {
+                const feedback = event.detail;
+                autoCompleteJS.input.blur();
+                autoCompleteJS.input.value = feedback.selection.value.title;
+
+                $('#frmSearch').submit();
+            });
+        })
+            
+        </script>
+
+
+        <nav class="astro-4ECYXV7B">
+
+            <div class="bg-main astro-4ECYXV7B">
+                <ul class="section-container hidden items-center divide-x divide-main-200 py-1 text-sm text-white xl:flex astro-4ECYXV7B">
+                    <li class="astro-4ECYXV7B">
+                        <a href="/az" class="block px-4 py-1 astro-4ECYXV7B">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                            </svg>
+
+                        </a>
+                    </li>
+
+                            <li class="group relative astro-4ECYXV7B">
+                                <a href="#" class="peer flex cursor-default px-3.5 py-1 astro-4ECYXV7B">
+                                    Elektron h&#246;kumət
+                                </a>
+                                <div class="absolute z-20 hidden pt-3 opacity-0 group-hover:block group-hover:animate-fade peer-focus:block peer-focus:animate-fade astro-4ECYXV7B">
+
+                                    <ul class="rounded-xl bg-white p-2 text-main shadow-2xl astro-4ECYXV7B">
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/content/read/2">&#220;mumi məlumat</a>
+                                            </li>
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/content/read/7">Xidmət təminat&#231;ıları</a>
+                                            </li>
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/content/read/44">Təlimatlar</a>
+                                            </li>
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/cios">CIOs</a>
+                                            </li>
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/home/faq?name=egov">FAQ</a>
+                                            </li>
+
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="group relative astro-4ECYXV7B">
+                                <a href="#" class="peer flex cursor-default px-3.5 py-1 astro-4ECYXV7B">
+                                    Reyestr və aktlar
+                                </a>
+                                <div class="absolute z-20 hidden pt-3 opacity-0 group-hover:block group-hover:animate-fade peer-focus:block peer-focus:animate-fade astro-4ECYXV7B">
+
+                                    <ul class="rounded-xl bg-white p-2 text-main shadow-2xl astro-4ECYXV7B">
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/content/read/13">D&#246;vlət xidmətlərinin elektron reyestri</a>
+                                            </li>
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/content/read/12">D&#246;vlət İnformasiya Ehtiyatları və Sistemləri Reyestri</a>
+                                            </li>
+
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="group relative astro-4ECYXV7B">
+                                <a href="#" class="peer flex cursor-default px-3.5 py-1 astro-4ECYXV7B">
+                                    Giriş n&#246;vləri
+                                </a>
+                                <div class="absolute z-20 hidden pt-3 opacity-0 group-hover:block group-hover:animate-fade peer-focus:block peer-focus:animate-fade astro-4ECYXV7B">
+
+                                    <ul class="rounded-xl bg-white p-2 text-main shadow-2xl astro-4ECYXV7B">
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/content/read/5">Elektron imza</a>
+                                            </li>
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/content/read/217">Asan imza</a>
+                                            </li>
+
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="group relative astro-4ECYXV7B">
+                                <a href="#" class="peer flex cursor-default px-3.5 py-1 astro-4ECYXV7B">
+                                    Sənədlər
+                                </a>
+                                <div class="absolute z-20 hidden pt-3 opacity-0 group-hover:block group-hover:animate-fade peer-focus:block peer-focus:animate-fade astro-4ECYXV7B">
+
+                                    <ul class="rounded-xl bg-white p-2 text-main shadow-2xl astro-4ECYXV7B">
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/content/read/25">Qanunvericilik</a>
+                                            </li>
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/content/read/37">Normativ-h&#252;quqi sənədlər</a>
+                                            </li>
+
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="group relative astro-4ECYXV7B">
+                                <a href="#" class="peer flex cursor-default px-3.5 py-1 astro-4ECYXV7B">
+                                    Media
+                                </a>
+                                <div class="absolute z-20 hidden pt-3 opacity-0 group-hover:block group-hover:animate-fade peer-focus:block peer-focus:animate-fade astro-4ECYXV7B">
+
+                                    <ul class="rounded-xl bg-white p-2 text-main shadow-2xl astro-4ECYXV7B">
+                                            <li class="astro-4ECYXV7B">
+                                                <a class="flex w-full whitespace-nowrap rounded-lg px-3.5 py-1 hover:bg-gray-200 astro-4ECYXV7B" href="/az/news">Xəbərlər</a>
+                                            </li>
+
+
+
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="astro-4ECYXV7B">
+                                <a class="flex px-3.5 py-1 items-center gap-3 astro-4ECYXV7B" href="/az/e-participation">
+                                    E-iştirakçılıq
+                                    <span class="rounded-xl bg-green-100 px-2.5 py-0.5 text-xs text-green-800 astro-4ECYXV7B">yeni</span>
+                                </a>
+                            </li>
+                            <li class="astro-4ECYXV7B">
+                                <a class="flex px-3.5 py-1 items-center gap-3 astro-4ECYXV7B" href="/az/international-cooperation">
+                                    Beynəlxalq əməkdaşlıq
+                                    <span class="rounded-xl bg-green-100 px-2.5 py-0.5 text-xs text-green-800 astro-4ECYXV7B">yeni</span>
+                                </a>
+                            </li>
+
+
+
+
+
+                </ul>
+            </div>
+            <div class="menu_mobile fixed top-0 z-50 h-screen w-full p-2 xl:hidden astro-4ECYXV7B"
+                 onclick="handleOverlayClick(event)">
+                <div class="relative z-10 flex flex-col gap-3 overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-black ring-opacity-5 astro-4ECYXV7B">
+                    <div class="flex items-center justify-between gap-10 bg-white p-5 pb-0 astro-4ECYXV7B">
+                        <img class="max-w-none astro-4ECYXV7B" alt="logotype" width="92" height="34"
+                             src="/ContentNew/assets/logo_2m3yzH.svg" loading="lazy" decoding="async">
+                        <button onclick="handleToggleMenu()" class="astro-4ECYXV7B">
+                            <img class="max-w-none astro-4ECYXV7B" alt="close" width="40" height="40"
+                                 src="/ContentNew/assets/xmark_2gAaF8.svg" loading="lazy" decoding="async">
+                        </button>
+                    </div>
+                    <ul class="menu__list_mobile flex flex-col items-start overflow-y-scroll p-2 pt-0 text-sm text-gray-700 astro-4ECYXV7B">
+                                <li class="w-full astro-4ECYXV7B">
+                                    <details class="astro-4ECYXV7B">
+                                        <summary class="cursor-pointer px-3 py-2 astro-4ECYXV7B">
+                                            Elektron h&#246;kumət
+                                        </summary>
+                                        <ul class="flex flex-col gap-1 astro-4ECYXV7B">
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/content/read/2">
+                                                        &#220;mumi məlumat
+                                                    </a>
+                                                </li>
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/content/read/7">
+                                                        Xidmət təminat&#231;ıları
+                                                    </a>
+                                                </li>
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/content/read/44">
+                                                        Təlimatlar
+                                                    </a>
+                                                </li>
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/cios">
+                                                        CIOs
+                                                    </a>
+                                                </li>
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/home/faq?name=egov">
+                                                        FAQ
+                                                    </a>
+                                                </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="w-full astro-4ECYXV7B">
+                                    <details class="astro-4ECYXV7B">
+                                        <summary class="cursor-pointer px-3 py-2 astro-4ECYXV7B">
+                                            Reyestr və aktlar
+                                        </summary>
+                                        <ul class="flex flex-col gap-1 astro-4ECYXV7B">
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/content/read/13">
+                                                        D&#246;vlət xidmətlərinin elektron reyestri
+                                                    </a>
+                                                </li>
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/content/read/12">
+                                                        D&#246;vlət İnformasiya Ehtiyatları və Sistemləri Reyestri
+                                                    </a>
+                                                </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="w-full astro-4ECYXV7B">
+                                    <details class="astro-4ECYXV7B">
+                                        <summary class="cursor-pointer px-3 py-2 astro-4ECYXV7B">
+                                            Giriş n&#246;vləri
+                                        </summary>
+                                        <ul class="flex flex-col gap-1 astro-4ECYXV7B">
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/content/read/5">
+                                                        Elektron imza
+                                                    </a>
+                                                </li>
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/content/read/217">
+                                                        Asan imza
+                                                    </a>
+                                                </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="w-full astro-4ECYXV7B">
+                                    <details class="astro-4ECYXV7B">
+                                        <summary class="cursor-pointer px-3 py-2 astro-4ECYXV7B">
+                                            Sənədlər
+                                        </summary>
+                                        <ul class="flex flex-col gap-1 astro-4ECYXV7B">
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/content/read/25">
+                                                        Qanunvericilik
+                                                    </a>
+                                                </li>
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/content/read/37">
+                                                        Normativ-h&#252;quqi sənədlər
+                                                    </a>
+                                                </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li class="w-full astro-4ECYXV7B">
+                                    <details class="astro-4ECYXV7B">
+                                        <summary class="cursor-pointer px-3 py-2 astro-4ECYXV7B">
+                                            Media
+                                        </summary>
+                                        <ul class="flex flex-col gap-1 astro-4ECYXV7B">
+                                                <li class="astro-4ECYXV7B">
+                                                    <a class="flex w-full whitespace-nowrap rounded-lg bg-gray-50 py-2 pl-6 astro-4ECYXV7B"
+                                                       href="/az/news">
+                                                        Xəbərlər
+                                                    </a>
+                                                </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                                        <li class="w-full astro-4ECYXV7B">
+                                    <a class="flex px-3 py-2 items-center gap-3 astro-4ECYXV7B" href="/az/Content/Participation">
+                                        E-iştirakçılıq
+                                        <span class="rounded-xl bg-green-100 px-2.5 py-0.5 text-xs text-green-800 astro-4ECYXV7B">
+                                            yeni
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="w-full astro-4ECYXV7B">
+                                    <a class="flex px-3 py-2 items-center gap-3 astro-4ECYXV7B" href="/az/Content/Cooperation">
+                                        Əməkdaşlıq
+                                        <span class="rounded-xl bg-green-100 px-2.5 py-0.5 text-xs text-green-800 astro-4ECYXV7B">
+                                            yeni
+                                        </span>
+                                    </a>
+                                </li>
+
+                    </ul>
+                        <a class="w-full bg-gray-50 p-3 text-center font-medium text-main astro-4ECYXV7B" href="https://asanlogin.my.gov.az/auth?origin=https://e-gov.az">
+                            PORTALA GİRİŞ
+                        </a>
+                </div>
+            </div>
+        </nav>
+
+        <script>
+            const mobileMenuEl = document.querySelector(".menu_mobile");
+
+            function handleToggleMenu() {
+                mobileMenuEl.classList.toggle("active");
+            }
+
+            function handleOverlayClick(ev) {
+                if (ev.target === mobileMenuEl) handleToggleMenu();
+            }
+        </script>
+
+
+        
+
+
+
+
+<section class="bg-main-300 astro-JHLM22H4" id="hero">
+    <div class="main-banner-section overflow-hidden astro-JHLM22H4">
+        <div class="section-container py-10 xl:pb-32 xl:pt-20 astro-JHLM22H4">
+            <div class="relative flex items-center xl:items-end astro-JHLM22H4">
+                <div class="relative z-10 flex flex-1 flex-col text-white astro-JHLM22H4">
+                    <h2 class="flex flex-col gap-2 astro-JHLM22H4">
+                        Milli strategiya
+                        <span class="whitespace-nowrap text-4xl font-bold xl:text-4.5xl xl:font-normal astro-JHLM22H4">Azərbaycan 2030</span>
+                    </h2>
+                    <p class="relative z-20 text-lg astro-JHLM22H4">
+                        M&#252;asir innovasiyalar sahəsində yaradıcı və innovativ cəmiyyət
+                    </p>
+
+                    <div class="mt-9 hidden items-center gap-2 xl:flex astro-JHLM22H4">
+                        <button class="rounded-full bg-white p-5 astro-JHLM22H4" id="hero-carousel-prev">
+                            <img class="max-w-none astro-JHLM22H4" alt="" width="18" height="18" src="/ContentNew/assets/arrow-blue_ZUBwnd.svg" loading="eager" decoding="async">
+                        </button>
+                        <button class="rounded-full bg-white p-5 astro-JHLM22H4" id="hero-carousel-next">
+                            <img class="max-w-none rotate-180 transform astro-JHLM22H4" alt="" width="18" height="18" src="/ContentNew/assets/arrow-blue_ZgGcSc.svg" loading="eager" decoding="async">
+                        </button>
+                    </div>
+                </div>
+                <img class="absolute left-1/2 top-1/2 z-0 max-w-none -translate-x-1/4 -translate-y-1/2 transform astro-JHLM22H4" alt="" width="1331" height="600" src="/ContentNew/assets/light_Z88bEv.svg" loading="eager" decoding="async">
+                <div class="-ml-12 flex-1 astro-JHLM22H4">
+                    <div class="relative z-10 flex h-72 astro-JHLM22H4">
+                        <img class="absolute top-1/2 max-w-none -translate-y-1/2 transform astro-JHLM22H4" style="z-index: -1" alt="" width="563" height="559" src="/ContentNew/assets/net_2q8bdQ.svg" loading="eager" decoding="async">
+                        <div class="hidden xl:block astro-JHLM22H4">
+                            <div class="slide-item absolute hidden flex-col items-center active astro-JHLM22H4" style="left: 22px; top: 18px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="0">
+                                <a href="/az/services/info/3505/" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        Elektron g&#246;mr&#252;k bəyannaməsi
+
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 22px; top: 232px; transform: translate3d(-50%, 0, 0); z-index: 2;" data-slide-index="0">
+                                <a href="/az/services/info/3421" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        &#220;nvanlı sosial yardımla bağlı m&#252;raciətin edilməsi
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 208px; top: -52px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="0">
+                                <a href="/az/services/info/3148" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        Ali təhsil m&#252;əssisələrinə ərizələrin onlayn qəbulu
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 198px; top: 88px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="0">
+                                <a href="/az/services/info/2641" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        İmtahan nəticələri haqqında məlumatların internet və ya SMS ...
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 326px; top: 16px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="0">
+                                <a href="/az/services/info/2516" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        Namizədlərin imtahana buraxılış vərəqələri
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center active astro-JHLM22H4" style="left: 368px; top: 86px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="0">
+                                <a href="/az/services/info/3144" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        Əmək qabiliyyətinin m&#252;vəqqəti itirilməsinə g&#246;rə m&#252;avinət
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 312px; top: 198px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="0">
+                                <a href="/az/services/info/3493" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        Tibbi-Sosial Ekspert Komissiyasında sonuncu m&#252;ayinəyə dair m...
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center active astro-JHLM22H4" style="left: 346px; top: 276px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="0">
+                                <a href="/az/services/info/2467" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        AzDataCom internet xidmətinə qoşulma &#252;&#231;&#252;n sifariş
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 540px; top: 16px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="0">
+                                <a href="/az/services/info/3788" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        İpoteka kreditinin verilməsi
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 542px; top: 232px; transform: translate3d(-50%, 0, 0); z-index: 1;" data-slide-index="0">
+                                <a href="/az/services/info/3140" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        Hamiləliyə və doğuma g&#246;rə m&#252;avinət
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center active astro-JHLM22H4" style="left: 22px; top: 18px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="1">
+                                <a href="https://www.opendata.az/az" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        A&#231;ıq məlumat
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 208px; top: -52px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="1">
+                                <a href="https://www.meclis.gov.az/cat-layihe.php?cat=83&#38&lang=az" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        A&#231;ıq h&#252;quqi aktlar
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 138px; top: 250px; transform: translate3d(-50%, 0, 0); z-index: 1;" data-slide-index="1">
+                                <a href="https://www.e-qanun.az/" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        E-h&#252;quqi aktlar
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center active astro-JHLM22H4" style="left: 326px; top: 16px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="1">
+                                <a href="https://rih.gov.az/e-participation/list" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+
+                                        E-iştirak&#231;ılıq
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center active astro-JHLM22H4" style="left: 346px; top: 276px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="1">
+                                <a href="https://asan.gov.az/az/send-application" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        D&#246;vlət xidmətləri ilə bağlı rəy (ASAN)
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 22px; top: 18px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="2">
+                                <a href="https://edu.gov.az/az/" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        Təhsil
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center active astro-JHLM22H4" style="left: 22px; top: 232px; transform: translate3d(-50%, 0, 0); z-index: 2;" data-slide-index="2">
+                                <a href="https://sehiyye.gov.az/en/" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        Səhiyyə
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center active astro-JHLM22H4" style="left: 208px; top: -52px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="2">
+                                <a href="https://www.sosial.gov.az/en/ " class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        Məşğulluq
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 198px; top: 88px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="2">
+                                <a href="https://justice.gov.az/" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        Ədliyyə
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 238px; top: 232px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="2">
+                                <a href="http://eco.gov.az/ " class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        Ətraf m&#252;hit
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 398px; top: -26px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="2">
+                                <a href="https://maliyye.gov.az/en " class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        Maliyyə
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 368px; top: 86px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="2">
+                                <a href="https://cert.az/en/" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        Kiber təhl&#252;kəsizlik
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center active astro-JHLM22H4" style="left: 346px; top: 276px; transform: translate3d(-50%, 0, 0); z-index: 1;" data-slide-index="2">
+                                <a href="https://initiatives.weforum.org/c4ir/azerbaijan" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        İnfrastruktur
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 540px; top: 16px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="2">
+                                <a href="https://www.oananews.org/content/news/azerbaijan-prepares-road-map-introduction-ai" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        S&#252;ni intellekt
+                                    </span>
+                                </a>
+                            </div><div class="slide-item absolute hidden flex-col items-center astro-JHLM22H4" style="left: 542px; top: 232px; transform: translate3d(-50%, 0, 0); z-index: auto;" data-slide-index="2">
+                                <a href="https://www.fhn.gov.az/index.php?eng" class="slide-item__link relative animate-shadow-pulse self-center astro-JHLM22H4">
+                                    <span class="slide-item__content flex items-center astro-JHLM22H4">
+                                        B&#246;hran reaksiyası
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="container relative mx-auto astro-JHLM22H4">
+        <ul class="absolute -bottom-14 z-10 hidden w-full items-stretch gap-10 px-20 xl:flex astro-JHLM22H4">
+            <button data-slide-index="0" class="carousel-nav__item relative flex-1 overflow-hidden rounded-3xl bg-white text-left shadow-2xl astro-JHLM22H4">
+                <div class="flex flex-col items-start gap-1 p-8 text-sm astro-JHLM22H4">
+                    <span class="font-medium text-main astro-JHLM22H4">Populyar xidmətlər</span>
+                    <p class="text-gray-400 astro-JHLM22H4">TOP-10 ən &#231;ox istifadə edilən xidmətlər</p>
+                </div>
+
+                <div class="carousel-nav__progress absolute bottom-0 h-1.5 self-start bg-main astro-JHLM22H4"></div>
+            </button>
+            <button data-slide-index="1" class="carousel-nav__item relative flex-1 overflow-hidden rounded-3xl bg-white text-left shadow-2xl astro-JHLM22H4">
+                <div class="flex flex-col items-start gap-1 p-8 text-sm astro-JHLM22H4">
+                    <span class="font-medium text-main astro-JHLM22H4">E-iştirak&#231;ılıq və A&#231;ıq H&#246;kumət</span>
+                    <p class="text-gray-400 astro-JHLM22H4">D&#246;vlət idarə&#231;iliyində iştirak etmək</p>
+                </div>
+
+                <div class="carousel-nav__progress absolute bottom-0 h-1.5 self-start bg-main astro-JHLM22H4"></div>
+            </button>
+            <button data-slide-index="2" class="carousel-nav__item relative flex-1 overflow-hidden rounded-3xl bg-white text-left shadow-2xl astro-JHLM22H4">
+                <div class="flex flex-col items-start gap-1 p-8 text-sm astro-JHLM22H4">
+                    <span class="font-medium text-main astro-JHLM22H4">Dayanıqlı İnkişaf Məqsədləri</span>
+                    <p class="text-gray-400 astro-JHLM22H4">SDG-lər fəaliyyətdədir</p>
+                </div>
+
+                <div class="carousel-nav__progress absolute bottom-0 h-1.5 self-start bg-main astro-JHLM22H4"></div>
+            </button>
+        </ul>
+    </nav>
+</section>
+
+
+
+
+
+
+<script>
+    let isInitial = true;
+    let activeSlide = null;
+    let prevSlide = null;
+    let carouselInterval = null;
+    const slidesItems = Array.from(document.querySelectorAll(".slide-item"));
+    const navItems = document.querySelectorAll(".carousel-nav__item");
+    const slideItemLinks = document.querySelectorAll(".slide-item__link");
+    const nextButtonEl = document.getElementById("hero-carousel-next");
+    const prevButtonEl = document.getElementById("hero-carousel-prev");
+    const isSafari = window.safari !== undefined;
+
+    navItems.forEach((item, index) => {
+        item.addEventListener("click", function () {
+            setActiveCarousel(index, true)
+        });
+        item.addEventListener("mouseenter", setActiveEnter);
+        item.addEventListener("mouseleave", setActiveLeave);
+        var progress = $(item).find('.carousel-nav__progress');
+        progress.on('animationend', function () {
+            setActiveCarousel(index, false)
+        })
+    });
+
+
+    slideItemLinks.forEach((item) => {
+        //if (isSafari) {
+        //    item.classList.toggle("slide-item__link_safari", true);
+        //}
+        item.addEventListener("mouseenter", handleMouseEnterItem);
+        item.addEventListener("mouseleave", handleMouseLeaveItem);
+    });
+    nextButtonEl.addEventListener("click", handleNextCarousel);
+
+    prevButtonEl.addEventListener("click", handlePrevCarousel);
+
+    window.addEventListener("focus", handleFocusWindow);
+
+    function handleMouseEnterItem(ev) {
+        if (isInitial) {
+            slidesItems.forEach(function (item) {
+                item.classList.toggle("active", false);
+            });
+            isInitial = false;
+        }
+        ev.target.parentElement.classList.toggle("active", true);
+    }
+
+    function handleMouseLeaveItem(ev) {
+        ev.target.parentElement.classList.toggle("active", false);
+    }
+
+    function setActiveCarousel(index, isClick) {
+        if (isClick) {
+            prevSlide = activeSlide;
+            activeSlide = index++
+
+        } else {
+            prevSlide = index;
+            activeSlide = index + 1 > (navItems.length - 1) ? 0 : ++index
+        }
+        toggleActiveClass();
+    }
+
+    function setActiveEnter(ev) {
+        if (activeSlide == ev.currentTarget.dataset.slideIndex) {
+            var navItem = $(navItems.item(activeSlide))
+            var progressItem = navItem.find('.carousel-nav__progress')
+            $(progressItem).css("animation-play-state", "paused")
+        }
+    }
+    function setActiveLeave(ev) {
+        if (activeSlide == ev.currentTarget.dataset.slideIndex) {
+            var navItem = $(navItems.item(activeSlide))
+            var progressItem = navItem.find('.carousel-nav__progress')
+            $(progressItem).css("animation-play-state", "running")
+        }
+    }
+
+    function toggleActiveClass() {
+        navItems.item(prevSlide).classList.toggle("active", false);
+        setTimeout(() => {
+            navItems.item(activeSlide).classList.toggle("active", true);
+        }, 100);
+        if (activeSlide !== prevSlide) {
+            const prevSlideItems = slidesItems.filter((item) => {
+                return +item.dataset.slideIndex === prevSlide;
+            });
+
+            prevSlideItems.forEach(function (item) {
+                item.classList.toggle("flex", false);
+                item.classList.toggle("hidden", true);
+            });
+
+            const activeSlideItems = slidesItems.filter((item) => {
+                return +item.dataset.slideIndex === activeSlide;
+            });
+
+            activeSlideItems.forEach(function (item) {
+                item.classList.toggle("flex", true);
+                item.classList.toggle("hidden", false);
+            });
+        }
+    }
+
+    function handleNextCarousel() {
+        if (activeSlide + 1 > navItems.length - 1) {
+            navItems.item(0).click();
+        } else {
+            navItems.item(activeSlide + 1).click();
+        }
+    }
+
+    function handlePrevCarousel() {
+        if (activeSlide - 1 < 0) {
+            navItems.item(navItems.length - 1).click();
+        } else {
+            navItems.item(activeSlide - 1).click();
+        }
+    }
+
+    function handleFocusWindow() {
+        navItems.item(activeSlide).click();
+    }
+
+    navItems.item(0).click();
+
+
+    $('.main-banner-section').on('mouseenter', function () {
+        var navItem = $('.carousel-nav__item.active');
+        var progressItem = navItem.find('.carousel-nav__progress')
+        $(progressItem).css("animation-play-state", "paused")
+    });
+
+    $('.main-banner-section').on('mouseleave', function () {
+
+        var navItem = $('.carousel-nav__item.active');
+        var progressItem = navItem.find('.carousel-nav__progress')
+        $(progressItem).css("animation-play-state", "running")
+    });
+</script>
+
+<section class="section-container mt-24">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex flex-col items-start gap-1.5 sm:gap-3">
+            <h3 class="text-3xl text-main sm:text-4.5xl sm:leading-9">
+                Vətəndaş xidmətləri
+            </h3>
+            <p class="leading-6 text-gray-600 sm:leading-8.5">Hər kəs &#252;&#231;&#252;n f&#252;rsət</p>
+        </div>
+        <a href="/az/services?t=citizen" class="whitespace-nowrap rounded bg-main-300 px-6 py-2 text-center text-white">
+            B&#252;t&#252;n xidmətlər
+        </a>
+    </div>
+
+    <ul class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-7 xl:grid-cols-3">
+        <li class="h-full">
+            <article class="h-full">
+                <a class="flex h-full flex-col items-start justify-between gap-11 rounded-xl bg-white p-6 shadow hover:shadow-2xl"
+                   href="/az/services/info/3188/">
+                    <figure class="hidden rounded-full bg-gray-100 p-5 xl:block">
+                        <img class="max-w-none" alt="" width="45" height="45"
+                             src="/ContentNew/assets/clipboard-check_rhnGs.svg" loading="lazy" decoding="async">
+                    </figure>
+                    <div class="flex w-full items-center justify-between gap-4">
+                        <div class="flex flex-col items-start gap-2.5">
+                            <h2 class="font-medium leading-5 text-main">
+                                Əmək m&#252;qaviləsi bildirişləri
+                            </h2>
+                            <p class="text-sm leading-4.5 text-gray-600">
+                                Əmək m&#252;qaviləsi bildirişlərinin qeydiyyata alınması və bu barədə işəg&#246;t&#252;rənə məlumat verilməsi
+                            </p>
+                        </div>
+                        <figure class="rounded-full bg-main p-3 xl:p-5">
+                            <img class="max-w-none" alt="" width="18" height="18"
+                                 src="/ContentNew/assets/arrow-white_1nOmU9.svg" loading="lazy" decoding="async">
+                        </figure>
+                    </div>
+                </a>
+            </article>
+        </li>
+        <li class="h-full">
+            <article class="h-full">
+                <a class="flex h-full flex-col items-start justify-between gap-11 rounded-xl bg-white p-6 shadow hover:shadow-2xl"
+                   href="/az/services/info/3505/">
+                    <figure class="hidden rounded-full bg-gray-100 p-5 xl:block">
+                        <img class="max-w-none" alt="" width="45" height="45"
+                             src="/ContentNew/assets/desktop-computer_Z8Y987.svg" loading="lazy" decoding="async">
+                    </figure>
+                    <div class="flex w-full items-center justify-between gap-4">
+                        <div class="flex flex-col items-start gap-2.5">
+                            <h2 class="font-medium leading-5 text-main">
+                                Elektron g&#246;mr&#252;k bəyannaməsi
+                            </h2>
+                            <p class="text-sm leading-4.5 text-gray-600">
+                                Malların və nəqliyyat vasitələrinin g&#246;mr&#252;k rəsmiləşdirilməsi &#252;&#231;&#252;n elektron g&#246;mr&#252;k bəyannaməsinin qəbulu
+                            </p>
+                        </div>
+                        <figure class="rounded-full bg-main p-3 xl:p-5">
+                            <img class="max-w-none" alt="" width="18" height="18"
+                                 src="/ContentNew/assets/arrow-white_1nOmU9.svg" loading="lazy" decoding="async">
+                        </figure>
+                    </div>
+                </a>
+            </article>
+        </li>
+        <li class="h-full">
+            <article class="h-full">
+                <a class="flex h-full flex-col items-start justify-between gap-11 rounded-xl bg-white p-6 shadow hover:shadow-2xl"
+                   href="/az/services/info/3144/">
+                    <figure class="hidden rounded-full bg-gray-100 p-5 xl:block">
+                        <img class="max-w-none" alt="" width="45" height="45"
+                             src="/ContentNew/assets/clipboard-list_1ShvYq.svg" loading="lazy" decoding="async">
+                    </figure>
+                    <div class="flex w-full items-center justify-between gap-4">
+                        <div class="flex flex-col items-start gap-2.5">
+                            <h2 class="font-medium leading-5 text-main">
+                                Əmək qabiliyyətinin m&#252;vəqqəti itirilməsinə g&#246;rə m&#252;avinətlə bağlı haqq-hesab cədvəlinin verilməsi
+                            </h2>
+
+                        </div>
+                        <figure class="rounded-full bg-main p-3 xl:p-5">
+                            <img class="max-w-none" alt="" width="18" height="18"
+                                 src="/ContentNew/assets/arrow-white_1nOmU9.svg" loading="lazy" decoding="async">
+                        </figure>
+                    </div>
+                </a>
+            </article>
+        </li>
+        <li class="h-full">
+            <article class="h-full">
+                <a class="flex h-full flex-col items-start justify-between gap-11 rounded-xl bg-white p-6 shadow hover:shadow-2xl"
+                   href="/az/services/info/3295/">
+                    <figure class="hidden rounded-full bg-gray-100 p-5 xl:block">
+                        <img class="max-w-none" alt="" width="45" height="45" src="/ContentNew/assets/collection_Zjkw21.svg"
+                             loading="lazy" decoding="async">
+                    </figure>
+                    <div class="flex w-full items-center justify-between gap-4">
+                        <div class="flex flex-col items-start gap-2.5">
+                            <h2 class="font-medium leading-5 text-main">
+                                İş yerinə dair arayış
+                            </h2>
+                            <p class="text-sm leading-4.5 text-gray-600">
+                                Məşğulluğun təsdiqi
+                            </p>
+                        </div>
+                        <figure class="rounded-full bg-main p-3 xl:p-5">
+                            <img class="max-w-none" alt="" width="18" height="18"
+                                 src="/ContentNew/assets/arrow-white_1nOmU9.svg" loading="lazy" decoding="async">
+                        </figure>
+                    </div>
+                </a>
+            </article>
+        </li>
+        <li class="h-full">
+            <article class="h-full">
+                <a class="flex h-full flex-col items-start justify-between gap-11 rounded-xl bg-white p-6 shadow hover:shadow-2xl"
+                   href="/az/services/info/3187/">
+                    <figure class="hidden rounded-full bg-gray-100 p-5 xl:block">
+                        <img class="max-w-none" alt="" width="45" height="45"
+                             src="/ContentNew/assets/document-duplicate_1sOWi2.svg" loading="lazy" decoding="async">
+                    </figure>
+                    <div class="flex w-full items-center justify-between gap-4">
+                        <div class="flex flex-col items-start gap-2.5">
+                            <h2 class="font-medium leading-5 text-main">
+                                Əmək m&#252;qaviləsi bildirişləri barədə iş&#231;ilərə məlumat verilməsi
+                            </h2>
+
+                        </div>
+                        <figure class="rounded-full bg-main p-3 xl:p-5">
+                            <img class="max-w-none" alt="" width="18" height="18"
+                                 src="/ContentNew/assets/arrow-white_1nOmU9.svg" loading="lazy" decoding="async">
+                        </figure>
+                    </div>
+                </a>
+            </article>
+        </li>
+        <li class="h-full">
+            <article class="h-full">
+                <a class="flex h-full flex-col items-start justify-between gap-11 rounded-xl bg-white p-6 shadow hover:shadow-2xl"
+                   href="/az/services/info/3709/">
+                    <figure class="hidden rounded-full bg-gray-100 p-5 xl:block">
+                        <img class="max-w-none" alt="" width="45" height="45" src="/ContentNew/assets/briefcase_Z1KibVd.svg"
+                             loading="lazy" decoding="async">
+                    </figure>
+                    <div class="flex w-full items-center justify-between gap-4">
+                        <div class="flex flex-col items-start gap-2.5">
+                            <h2 class="font-medium leading-5 text-main">
+                                &quot;G&#252;zəştli mənzil&quot; sistemi
+                            </h2>
+
+                        </div>
+                        <figure class="rounded-full bg-main p-3 xl:p-5">
+                            <img class="max-w-none" alt="" width="18" height="18"
+                                 src="/ContentNew/assets/arrow-white_1nOmU9.svg" loading="lazy" decoding="async">
+                        </figure>
+                    </div>
+                </a>
+            </article>
+        </li>
+    </ul>
+</section>
+<section class="section-container mt-20 flex flex-col gap-10">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex flex-col items-start gap-1.5 sm:gap-3">
+            <h3 class="text-3xl text-main sm:text-4.5xl sm:leading-9">
+                Sahibkar xidmətləri
+            </h3>
+            <p class="leading-6 text-gray-600 sm:leading-8.5">Biznes qurmaq &#252;&#231;&#252;n rahat şərait yaratmaq</p>
+        </div>
+        <a href="/az/services?t=business" class="whitespace-nowrap rounded bg-main-300 px-6 py-2 text-center text-white">
+            B&#252;t&#252;n xidmətlər
+        </a>
+    </div>
+    <hr class="bg-gray-600">
+    <ul class="grid grid-cols-1 gap-11 sm:grid-cols-2 sm:gap-16">
+        <li>
+            
+            <a href="/az/services/info/3646/" class="text-lg text-main">
+                Məcburi d&#246;vlət sosial sığortası &#252;zrə hesabatların təqdim edilməsi
+            </a>
+        </li>
+        <li>
+            
+            <a href="/az/services/info/3542/" class="text-lg text-main">
+                Elektron G&#246;mr&#252;k Bəyannaməsi haqqında məlumatların əldə edilməsi
+            </a>
+        </li>
+        <li>
+            
+            <a href="/az/services/info/2750/" class="text-lg text-main">
+                Sığortaolunanın onlayn qeydiyyatı
+            </a>
+        </li>
+        <li>
+            
+            <a href="/az/services/info/3187/"
+               class="text-lg text-main">
+                İş&#231;ilərə əmək m&#252;qaviləsi haqqında bildirişlərin verilməsi
+            </a>
+        </li>
+        <li>
+            
+            <a href="/az/services/info/3144/"
+               class="text-lg text-main">
+                M&#252;vəqqəti əlillik &#252;zrə hesab cədvəli
+            </a>
+        </li>
+    </ul>
+</section>
+<section class="section-container mt-20 flex flex-col gap-7">
+    <div class="flex flex-col items-start gap-1.5 sm:gap-3">
+        <h3 class="text-3xl text-main sm:text-4.5xl sm:leading-9">
+            Dayanıqlı İnkişaf Məqsədləri
+        </h3>
+        <p class="leading-6 text-gray-600 sm:leading-8.5">
+            Azərbaycanda Dayanıqlı İnkişaf Məqsədləri və onun &#252;zərində iş haqqında məlumat
+        </p>
+    </div>
+    <ul class="grid auto-rows-14.25 grid-cols-1 gap-8 text-white sm:grid-cols-2 lg:grid-cols-4">
+        <li class="col-span-1 row-span-2 sm:col-span-2">
+            <a href="https://azerbaijan.un.org/az/sdgs"
+               class="relative flex h-full items-end justify-start overflow-hidden rounded-3xl bg-main p-5 sm:p-8">
+                <div class="flex flex-col gap-2 text-lg sm:text-3xl">
+                    <h2>
+                        Azərbaycanda Dayanıqlı İnkişaf Məqsədləri &#252;zrə işimiz
+                    </h2>
+                    <picture>
+                        <source type="image/avif"
+                                srcset="/ContentNew/assets/flag_T1AzO.jpeg 926w,/ContentNew/assets/flag_ZCgLUE.jpeg 463w" sizes="463px">
+                        <source type="image/webp"
+                                srcset="/ContentNew/assets/flag_ZLlsRo.webp 926w,/ContentNew/assets/flag_Z2iDQnR.webp 463w" sizes="463px">
+                        <source type="image/png" srcset="/ContentNew/assets/flag_Z1lM5vC.png 926w,/ContentNew/assets/flag_2c6ELP.png 463w"
+                                sizes="463px">
+                        <img alt="" src="/ContentNew/assets/flag_Z1lM5vC.png" loading="" decoding="async"
+                             class="absolute -right-9 -top-8 max-w-none" format="webp">
+                    </picture>
+                </div>
+                <figure class="absolute right-5 top-5 rounded-full bg-white p-5">
+                    <img class="max-w-none rotate-180 transform" alt="" width="18" height="18"
+                         src="/ContentNew/assets/arrow-blue_1kvidW.svg" loading="lazy" decoding="async">
+                </figure>
+            </a>
+        </li>
+        <li class="col-span-1 sm:col-span-2">
+            <a href="https://www.undp.org/sustainable-development-goals"
+               class="relative flex h-full overflow-hidden rounded-3xl bg-main">
+                <picture>
+                    <source type="image/avif"
+                            srcset="/ContentNew/assets/goals_1o8xqq.jpeg 1204w,/ContentNew/assets/goals_Z2rnQ7c.jpeg 602w" sizes="602px">
+                    <source type="image/webp" srcset="/ContentNew/assets/goals_doIha.webp 1204w,/ContentNew/assets/goals_Wqdew.webp 602w"
+                            sizes="602px">
+                    <source type="image/png" srcset="/ContentNew/assets/goals_28gEQR.png 1204w,/ContentNew/assets/goals_ZrQkTS.png 602w"
+                            sizes="602px">
+                    <img alt="" src="/ContentNew/assets/goals_28gEQR.png" loading="lazy" decoding="async"
+                         class="absolute right-5 top-5 max-w-none object-cover" format="webp">
+                </picture>
+
+                <figure class="absolute right-5 top-5 rounded-full bg-white p-5">
+                    <img class="max-w-none rotate-180 transform" alt="" width="18" height="18"
+                         src="/ContentNew/assets/arrow-blue_1kvidW.svg" loading="lazy" decoding="async">
+                </figure>
+            </a>
+        </li>
+        <li>
+            <a href="https://sdg.azstat.org/az/home" class="flex h-full overflow-hidden rounded-3xl bg-main p-5">
+                <div class="flex h-full w-full flex-col justify-between gap-6">
+                    <figure class="self-end rounded-full bg-white p-4">
+                        <img class="max-w-none rotate-135 transform" alt="" width="14" height="14"
+                             src="/ContentNew/assets/arrow-blue_ZtRtnT.svg" loading="lazy" decoding="async">
+                    </figure>
+                    <h2 class="flex justify-self-end text-4xl lg:text-xl xl:text-4xl">
+                        Milli İnformasiya Portalı
+                    </h2>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="https://president.az/az/articles/view/50474"
+               class="flex h-full overflow-hidden rounded-3xl bg-main p-5">
+                <div class="flex h-full w-full justify-between gap-6">
+                    <h2 class="self-end text-4xl leading-10 lg:text-lg xl:text-4xl">
+                        Gələcək planlar
+                    </h2>
+                    <figure class="self-start rounded-full bg-white p-4">
+                        <img class="max-w-none rotate-135 transform" alt="" width="14" height="14"
+                             src="/ContentNew/assets/arrow-blue_ZtRtnT.svg" loading="lazy" decoding="async">
+                    </figure>
+                </div>
+            </a>
+        </li>
+    </ul>
+</section>
+<section class="section-container mt-14 astro-ZABBJA3A">
+    <div class="flex flex-col items-start gap-1.5 sm:gap-3">
+        <h3 class="text-3xl text-main sm:text-4.5xl sm:leading-9">
+            Portal xəbərləri
+        </h3>
+        <p class="leading-6 text-gray-600 sm:leading-8.5">G&#252;ndəmdə qalın</p>
+    </div>
+    <div id="news-swiper" class="relative mt-10 astro-ZABBJA3A">
+        <ul class="swiper-wrapper flex items-center astro-ZABBJA3A">
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/886">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">“Azərbaycanda rəqəmsal h&#246;kumətin inkişafı” m&#246;vzusunda v&#246;rkşop ke&#231;irilib</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="“Azərbaycanda rəqəmsal h&#246;kumətin inkişafı” m&#246;vzusunda v&#246;rkşop ke&#231;irilib" src="/Uploads/news_pics/" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/887">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">&quot;Kağızsız H&#246;kumət&quot;-ə ke&#231;id &#231;ər&#231;ivəsində Milli Məlumat M&#252;badiləsi platformasının ...</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="&quot;Kağızsız H&#246;kumət&quot;-ə ke&#231;id &#231;ər&#231;ivəsində Milli Məlumat M&#252;badiləsi platformasının ..." src="/Uploads/news_pics/" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/883">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">&#160;&#214;dənişsiz internetə &#231;ıxışın &#252;st&#252;nl&#252;kləri</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="&#160;&#214;dənişsiz internetə &#231;ıxışın &#252;st&#252;nl&#252;kləri" src="/Uploads/news_pics/news_1199_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/881">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">D&#252;nya Bankı tərəfindən Azərbaycanın rəqəmsal inkişaf strategiyası &#252;&#231;&#252;n modullard...</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="D&#252;nya Bankı tərəfindən Azərbaycanın rəqəmsal inkişaf strategiyası &#252;&#231;&#252;n modullard..." src="/Uploads/news_pics/news_1195_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/875">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">D&#246;vlət Vergi Xidməti: Elektron kabinetin mobil tətbiqi &#252;zərində iş aparılır</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="D&#246;vlət Vergi Xidməti: Elektron kabinetin mobil tətbiqi &#252;zərində iş aparılır" src="/Uploads/news_pics/news_1183_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/874">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">Azərkosmos və “SpaceX” şirkəti arasında əməkdaşlıq m&#252;qaviləsi imzalandı</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="Azərkosmos və “SpaceX” şirkəti arasında əməkdaşlıq m&#252;qaviləsi imzalandı" src="/Uploads/news_pics/news_1181_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/878">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">Elektron qaimə &#252;&#231;&#252;n vergilər sisteminə ke&#231;idə ehtiyac qalmadı</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="Elektron qaimə &#252;&#231;&#252;n vergilər sisteminə ke&#231;idə ehtiyac qalmadı" src="/Uploads/news_pics/news_1189_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/873">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">Nazir m&#252;avini Samir Məmmədov Koreya Respublikasının n&#252;mayəndə heyəti ilə g&#246;r&#252;ş&#252;b</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="Nazir m&#252;avini Samir Məmmədov Koreya Respublikasının n&#252;mayəndə heyəti ilə g&#246;r&#252;ş&#252;b" src="/Uploads/news_pics/news_1179_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/872">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">2023-c&#252; ildə “Elektron xəstəlik vərəqəsi” (e-b&#252;lleten) sisteminə ke&#231;id nəzərdə t...</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="2023-c&#252; ildə “Elektron xəstəlik vərəqəsi” (e-b&#252;lleten) sisteminə ke&#231;id nəzərdə t..." src="/Uploads/news_pics/news_1177_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/880">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">“e-Tabib” mobil tətbiqi yeniləndi</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="“e-Tabib” mobil tətbiqi yeniləndi" src="/Uploads/news_pics/news_1193_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/871">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">Səhiyyə Nazirliyi: 2023-c&#252; ildən etibarən “Elektron Epikriz” səhiyyə iş&#231;iləri &#252;&#231;...</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="Səhiyyə Nazirliyi: 2023-c&#252; ildən etibarən “Elektron Epikriz” səhiyyə iş&#231;iləri &#252;&#231;..." src="/Uploads/news_pics/news_1175_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/879">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">Maliyyə u&#231;ot sisteminin d&#252;zg&#252;n qurulmasına xidmət edən &quot;Elektron hesab səhifəsi&quot;</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="Maliyyə u&#231;ot sisteminin d&#252;zg&#252;n qurulmasına xidmət edən &quot;Elektron hesab səhifəsi&quot;" src="/Uploads/news_pics/news_1191_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/869">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">Əmək və Əhalinin Sosial M&#252;dafiəsi Nazirliyinin fəaliyyət sahələri &#252;zrə son bir a...</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="Əmək və Əhalinin Sosial M&#252;dafiəsi Nazirliyinin fəaliyyət sahələri &#252;zrə son bir a..." src="/Uploads/news_pics/news_1172_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/876">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">&quot;Elektron vəkil&quot; informasiya sistemi təkmilləşdirilir</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="&quot;Elektron vəkil&quot; informasiya sistemi təkmilləşdirilir" src="/Uploads/news_pics/news_1185_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/867">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">Səhiyyə Nazirliyi İT sistemlərini qismən “H&#246;kumət buludu”na k&#246;&#231;&#252;r&#252;r</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="Səhiyyə Nazirliyi İT sistemlərini qismən “H&#246;kumət buludu”na k&#246;&#231;&#252;r&#252;r" src="/Uploads/news_pics/news_1168_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/866">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">2022-ci ilin mart ayından e-taxes.gov.az portalında “Asan İmza” şəxsi kabineti i...</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="2022-ci ilin mart ayından e-taxes.gov.az portalında “Asan İmza” şəxsi kabineti i..." src="/Uploads/news_pics/news_1166_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/877">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">G&#246;mr&#252;k &#246;dənişləri vahid platforma &#252;zərindən həyata ke&#231;iriləcək</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="G&#246;mr&#252;k &#246;dənişləri vahid platforma &#252;zərindən həyata ke&#231;iriləcək" src="/Uploads/news_pics/news_1187_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/868">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">“Pensiya kalkulyatoru” e-xidmətinə 1,3 milyondan &#231;ox m&#252;raciət olub</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="“Pensiya kalkulyatoru” e-xidmətinə 1,3 milyondan &#231;ox m&#252;raciət olub" src="/Uploads/news_pics/news_1170_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/865">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">Azərbaycanda kibergigiyena &#252;zrə ilk beynəlxalq konfrans ke&#231;irilib</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="Azərbaycanda kibergigiyena &#252;zrə ilk beynəlxalq konfrans ke&#231;irilib" src="/Uploads/news_pics/news_1165_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+                    <li class="swiper-slide astro-ZABBJA3A">
+                        <article class="news relative flex items-end justify-start overflow-hidden rounded-xl bg-gradient-to-b from-transparent to-black text-white astro-ZABBJA3A">
+                            <div class="flex flex-col gap-2.5 p-6 astro-ZABBJA3A">
+                                <a href="/az/news/read/864">
+                                    <h2 class="text-lg font-bold leading-6 astro-ZABBJA3A">4-c&#252; “Rəqəmsal Jurnalistikaya doğru” proqramının təlimləri yekunlaşıb</h2>
+                                    <div class="flex items-center gap-2 text-sm leading-8 astro-ZABBJA3A">
+                                        Daha &#231;ox
+                                        <img alt="icon-arrow" class="astro-ZABBJA3A" width="14" height="14"
+                                             src="/ContentNew/assets/arrow-white_1sSioR.svg" loading="lazy" decoding="async">
+                                    </div>
+                                </a>
+
+                            </div>
+                            <img alt="4-c&#252; “Rəqəmsal Jurnalistikaya doğru” proqramının təlimləri yekunlaşıb" src="/Uploads/news_pics/news_1164_L.png" width="513" height="300"
+                                 class="news news__image absolute left-0 top-0 -z-10 astro-ZABBJA3A">
+                        </article>
+                    </li>
+
+
+        </ul>
+        <nav class="absolute -top-12 right-0 flex items-center gap-3 astro-ZABBJA3A">
+            <button id="news-prev" class="astro-ZABBJA3A">
+                <img alt="" class="astro-ZABBJA3A" width="24" height="24" src="/ContentNew/assets/arrow-blue_AQ0gH.svg"
+                     loading="lazy" decoding="async">
+            </button>
+            <button id="news-next" class="rotate-180 transform astro-ZABBJA3A">
+                <img alt="" class="astro-ZABBJA3A" width="24" height="24" src="/ContentNew/assets/arrow-blue_AQ0gH.svg"
+                     loading="lazy" decoding="async">
+            </button>
+        </nav>
+    </div>
+</section>
+
+
+<script type="module">
+    const swiper = new Swiper("#news-swiper", {
+        autoplay: {
+            delay: 5000,
+        },
+        spaceBetween: 18,
+        breakpoints: {
+            415: {
+                slidesPerView: 2,
+            },
+
+            1535: {
+                slidesPerView: 3,
+            },
+        },
+        navigation: {
+            nextEl: "#news-next",
+            prevEl: "#news-prev",
+        },
+    });
+</script>
+<section class="section-container mt-20 flex flex-col gap-5 astro-LRPIJJZP">
+    <h3 class="text-3xl text-main sm:text-4.5xl sm:leading-9">
+        M&#252;h&#252;m ke&#231;idlər
+    </h3>
+    <div id="links-swiper" class="relative mt-10 astro-LRPIJJZP">
+    <ul class="swiper-wrapper flex items-center astro-LRPIJJZP">
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://idda.az" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/jpeg" srcset="/ContentNew/assets/idda_az.jpg 510w,/ContentNew/assets/idda_az.jpg 255w" sizes="255px">
+                    <source type="image/jpeg" srcset="/ContentNew/assets/idda_az.jpg 510w,/ContentNew/assets/idda_az.jpg 255w" sizes="255px">
+                    <source type="image/jpeg" srcset="/ContentNew/assets/idda_az.jpg 510w,/ContentNew/assets/idda_az.jpg 255w" sizes="255px">
+                    <img alt="https://idda.az" src="/ContentNew/assets/idda_az.jpg" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://asan.gov.az/az" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/0_Z1eNYT9.avif 510w,/ContentNew/assets/0_Z2d5Thz.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/0_Z2pxO3p.webp 510w,/ContentNew/assets/0_1Gmpn6.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/0_Z1DYs2X.png 510w,/ContentNew/assets/0_2rULnx.png 255w" sizes="255px">
+                    <img alt="https://asan.gov.az/az" src="/ContentNew/assets/0_Z1DYs2X.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://president.az/az" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/1_ZFBP4w.avif 510w,/ContentNew/assets/1_Z1DSJrW.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/1_Z1QlEdM.webp 510w,/ContentNew/assets/1_2fyzcI.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/1_Z18QYk7.png 510w,/ContentNew/assets/1_Z278SHx.png 255w" sizes="255px">
+                    <img alt="https://president.az/az" src="/ContentNew/assets/1_Z18QYk7.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://nk.gov.az/az" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/2_Z7pFeT.avif 510w,/ContentNew/assets/2_Z15GzCk.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/2_Z1i9uoa.webp 510w,/ContentNew/assets/2_Z2gqoLA.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/2_ZCJvBg.png 510w,/ContentNew/assets/2_Z1B1pYG.png 255w" sizes="255px">
+                    <img alt="https://nk.gov.az/az" src="/ContentNew/assets/2_ZCJvBg.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://turkiye.gov.tr" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/3_qLtzI.avif 510w,/ContentNew/assets/3_ZwupMH.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/3_ZIWkyx.webp 510w,/ContentNew/assets/3_Z1HeeVX.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/3_Z7C2Sp.png 510w,/ContentNew/assets/3_Z15SWgP.png 255w" sizes="255px">
+                    <img alt="https://turkiye.gov.tr" src="/ContentNew/assets/3_Z7C2Sp.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://edu.gov.az/az/" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/4_YXDpl.avif 510w,/ContentNew/assets/4_1GJ1U.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/4_ZaKaIU.webp 510w,/ContentNew/assets/4_Z19257l.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/4_nupOr.png 510w,/ContentNew/assets/4_ZzLtxY.png 255w" sizes="255px">
+                    <img alt="https://edu.gov.az/az/" src="/ContentNew/assets/4_nupOr.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://sosial.gov.az/?hl=az" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/5_1yaNeX.avif 510w,/ContentNew/assets/5_zSSQx.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/5_nqY5H.webp 510w,/ContentNew/assets/5_ZzOUhI.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/5_SBSxi.png 510w,/ContentNew/assets/5_Z4E0P8.png 255w" sizes="255px">
+                    <img alt="https://sosial.gov.az/?hl=az" src="/ContentNew/assets/5_SBSxi.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://sehiyye.gov.az/" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/6_27mX4A.avif 510w,/ContentNew/assets/6_1963Ga.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/6_VD8Uk.webp 510w,/ContentNew/assets/6_Z1CKs6.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/6_1oJmg9.png 510w,/ContentNew/assets/6_qsrRI.png 255w" sizes="255px">
+                    <img alt="https://sehiyye.gov.az/" src="/ContentNew/assets/6_1oJmg9.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="http://eco.gov.az/" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/7_Z2oC0TI.avif 510w,/ContentNew/assets/7_1HidvM.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/7_1uPiJW.webp 510w,/ContentNew/assets/7_wyomw.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/7_1TQOY0.png 510w,/ContentNew/assets/7_VzUAz.png 255w" sizes="255px">
+                    <img alt="http://eco.gov.az/" src="/ContentNew/assets/7_1TQOY0.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://maliyye.gov.az/az" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/8_Z1PpQ56.avif 510w,/ContentNew/assets/8_2gunlp.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/8_242szz.webp 510w,/ContentNew/assets/8_15Kyc9.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/8_2pYiGQ.png 510w,/ContentNew/assets/8_1rHojq.png 255w" sizes="255px">
+                    <img alt="https://maliyye.gov.az/az" src="/ContentNew/assets/8_2pYiGQ.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://etender.gov.az/" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/9_Z1hdGft.avif 510w,/ContentNew/assets/9_Z2fuACT.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/9_Z2rWvoJ.webp 510w,/ContentNew/assets/9_1DWI1L.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/9_Z295moe.png 510w,/ContentNew/assets/9_1WOR2h.png 255w" sizes="255px">
+                    <img alt="https://etender.gov.az/" src="/ContentNew/assets/9_Z295moe.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://justice.gov.az/" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/10_Z2cmJJ3.avif 510w,/ContentNew/assets/10_1TxtGs.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/10_1H5yUC.webp 510w,/ContentNew/assets/10_INExc.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/10_7bCwM.png 510w,/ContentNew/assets/10_ZQ5gPD.png 255w" sizes="255px">
+                    <img alt="https://justice.gov.az/" src="/ContentNew/assets/10_7bCwM.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://antikorrupsiya.gov.az/az/onlayn-muraciet" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/11_Z1DazTq.avif 510w,/ContentNew/assets/11_2sJDw5.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/11_2ghIKf.webp 510w,/ContentNew/assets/11_1i0OmO.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/11_Cj6fD.png 510w,/ContentNew/assets/11_ZkWN7M.png 255w" sizes="255px">
+                    <img alt="https://antikorrupsiya.gov.az/az/onlayn-muraciet" src="/ContentNew/assets/11_Cj6fD.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://mincom.gov.az/az/" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/12_Z14Xq4N.avif 510w,/ContentNew/assets/12_Z23fkse.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/12_Z2fHfe4.webp 510w,/ContentNew/assets/12_1QcYcr.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/12_18qyXu.png 510w,/ContentNew/assets/12_a9EA4.png 255w" sizes="255px">
+                    <img alt="https://mincom.gov.az/az/" src="/ContentNew/assets/12_18qyXu.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="http://www.scfwca.gov.az/az" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/13_ZvLgfb.avif 510w,/ContentNew/assets/13_Z1u3aCB.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/13_Z1Gv5or.webp 510w,/ContentNew/assets/13_2pp924.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/13_1Dy2Gl.png 510w,/ContentNew/assets/13_Fh8iU.png 255w" sizes="255px">
+                    <img alt="http://www.scfwca.gov.az/az" src="/ContentNew/assets/13_1Dy2Gl.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://www.stat.gov.az/?lang=az" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/14_2pSzr.avif 510w,/ContentNew/assets/14_ZUQ0MY.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/14_Z18iUyO.webp 510w,/ContentNew/assets/14_Z26zOWf.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/14_29Fvpc.png 510w,/ContentNew/assets/14_1boB1L.png 255w" sizes="255px">
+                    <img alt="https://www.stat.gov.az/?lang=az" src="/ContentNew/assets/14_29Fvpc.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+        <li class="swiper-slide flex justify-center astro-LRPIJJZP">
+            <a href="https://cert.az/az/" class="overflow-hidden rounded-2xl border border-gray-200 bg-white astro-LRPIJJZP">
+                <picture>
+                    <source type="image/avif" srcset="/ContentNew/assets/15_AC3p4.avif 510w,/ContentNew/assets/15_ZmDPXm.avif 255w" sizes="255px">
+                    <source type="image/webp" srcset="/ContentNew/assets/15_Zz6KJc.webp 510w,/ContentNew/assets/15_Z1xnF7C.webp 255w" sizes="255px">
+                    <source type="image/png" srcset="/ContentNew/assets/15_Z2po9FS.png 510w,/ContentNew/assets/15_1Gw4JC.png 255w" sizes="255px">
+                    <img alt="https://cert.az/az/" src="/ContentNew/assets/15_Z2po9FS.png" loading="eager" decoding="async" class="links links__image astro-LRPIJJZP" format="webp">
+                </picture>
+            </a>
+        </li>
+    </ul>
+
+
+        <nav class="absolute -top-12 right-0 flex items-center gap-3 astro-LRPIJJZP">
+            <button id="links-prev" class="astro-LRPIJJZP">
+                <img alt="" class="astro-LRPIJJZP" width="24" height="24" src="/ContentNew/assets/arrow-blue_Z2luyVa.svg"
+                     loading="lazy" decoding="async">
+            </button>
+            <button id="links-next" class="rotate-180 transform astro-LRPIJJZP">
+                <img alt="" class="astro-LRPIJJZP" width="24" height="24" src="/ContentNew/assets/arrow-blue_Z2luyVa.svg"
+                     loading="lazy" decoding="async">
+            </button>
+        </nav>
+    </div>
+</section>
+
+
+<script type="module">
+    const swiper = new Swiper("#links-swiper", {
+        autoplay: {
+            delay: 5000,
+        },
+        spaceBetween: 18,
+        navigation: {
+            nextEl: "#links-next",
+            prevEl: "#links-prev",
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 1,
+            },
+            560: {
+                slidesPerView: 2,
+            },
+            1024: {
+                slidesPerView: 3,
+            },
+            1280: {
+                slidesPerView: 4,
+            },
+        },
+    });
+</script>
+
+        <!-- Custom styles -->
+
+        <style>
+            .modal {
+                position: fixed;
+                z-index: 1050;
+                display: none;
+                overflow: hidden;
+                -webkit-overflow-scrolling: touch;
+                outline: 0;
+                width: 600px;
+                margin: 0 auto;
+                top: 100px;
+                z-index: 1050;
+                left: calc(50% - 300px);
+            }
+
+            .fade {
+                opacity: 0;
+                -webkit-transition: opacity .15s linear;
+                -o-transition: opacity .15s linear;
+                transition: opacity .15s linear;
+            }
+
+                .fade.in {
+                    opacity: 1;
+                }
+
+            .modal-content {
+                position: relative;
+                background-color: #fff;
+                -webkit-background-clip: padding-box;
+                background-clip: padding-box;
+                border: 1px solid #999;
+                border: 1px solid rgba(0,0,0,.2);
+                outline: 0;
+                -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+                box-shadow: 0 3px 9px rgba(0,0,0,.5);
+                border-radius: 8px;
+            }
+
+            .modal-header {
+                min-height: 16.43px;
+                padding: 15px;
+            }
+
+                .modal-header .close {
+                    margin-top: -2px;
+                }
+
+            button.close {
+                -webkit-appearance: none;
+                padding: 0;
+                cursor: pointer;
+                background: 0 0;
+                border: 0;
+            }
+
+            .close {
+                float: right;
+                font-size: 21px;
+                font-weight: 700;
+                line-height: 1;
+                color: #000;
+                text-shadow: 0 1px 0 #fff;
+                filter: alpha(opacity=20);
+                opacity: .2;
+            }
+
+            .modal-body {
+                position: relative;
+                padding: 15px;
+            }
+
+            .modal-footer {
+                padding: 15px;
+                text-align: right;
+            }
+
+            .modal-title {
+                margin: 0;
+                line-height: 1.42857143;
+                font-size: 18px;
+                font-weight: 500;
+                color: #025092
+            }
+
+            .modal-body {
+                position: relative;
+                padding: 15px;
+            }
+
+            .alert-danger {
+                background-image: -webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);
+                background-image: -o-linear-gradient(top,#f2dede 0,#e7c3c3 100%);
+                background-image: -webkit-gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
+                background-image: linear-gradient(to bottom,#f2dede 0,#e7c3c3 100%);
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2dede', endColorstr='#ffe7c3c3', GradientType=0);
+                background-repeat: repeat-x;
+                border-color: #dca7a7;
+            }
+
+            .alert {
+                text-shadow: 0 1px 0 rgba(255,255,255,.2);
+                -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);
+            }
+
+            .alert-danger {
+                color: #a94442;
+                background-color: #f2dede;
+                border-color: #ebccd1;
+            }
+
+            .alert {
+                padding: 15px;
+                margin-bottom: 20px;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            label {
+                display: inline-block;
+                max-width: 100%;
+                margin-bottom: 5px;
+                font-weight: 700;
+                font-size: 14px
+            }
+
+            .form-control[readonly], fieldset[disabled] .form-control {
+                background-color: #eee;
+                opacity: 1;
+            }
+
+            .form-control {
+                display: block;
+                width: 100%;
+                padding: 6px 12px;
+                font-size: 14px;
+                line-height: 1.42857143;
+                color: #555;
+                background-color: #fff;
+                background-image: none;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+                -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            }
+
+            .modal-footer {
+                padding: 15px;
+                text-align: right;
+            }
+
+                .modal-footer a {
+                    font-weight: bold;
+                    cursor: pointer;
+                    text-decoration: none;
+                    color: blue;
+                    margin-right: 8px;
+                    transition: all 0.1s linear;
+                }
+
+            .modal-backdrop.in {
+                /*filter: alpha(opacity=50);*/
+                opacity: .5 !important;
+                z-index: 1040;
+                position: fixed;
+                left: 0;
+                top: 0;
+                right: 0;
+                botttom: 0;
+                bottom: 0;
+                background-color: #000000;
+                opacity: 0.4
+            }
+
+
+            .modal-backdrop.fade {
+                /*filter: alpha(opacity=0);*/
+                opacity: 0;
+            }
+
+            .fade.in {
+                opacity: 1;
+                display: block;
+            }
+
+            .feedback-backdrop {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                z-index: 1040;
+                display: none;
+                background-color: #000;
+                opacity: 0;
+                -webkit-transition: opacity .15s linear;
+                -o-transition: opacity .15s linear;
+                transition: opacity .15s linear;
+            }
+
+                .feedback-backdrop.in {
+                    /*filter: alpha(opacity=50);*/
+                    opacity: .5;
+                    display: block;
+                }
+
+            .imgLoading {
+                margin: 3px;
+                /* position: absolute; */
+                width: 20px;
+                top: 0px;
+                right: 39px;
+                margin-left: auto;
+            }
+        </style>
+
+
+    <footer class="bg-white">
+        <div class="section-container mt-20 flex flex-col">
+            <section class="mt-12 flex flex-col justify-between gap-10 sm:flex-row sm:items-center">
+                <div class="flex flex-col gap-2">
+                    <h3 class="text-4xl font-bold text-main">Rəy bildirin</h3>
+                    <p class="text-sm leading-4.5 text-gray-400">
+                        Portalın gələcək təkmilləşdirilməsi &#252;&#231;&#252;n &#246;z rəyinizi bildirin və ya onlayn xidmətin g&#246;stərilməsi ilə bağlı şikayətinizi bizə g&#246;ndərin
+                    </p>
+                </div>
+                <button id="goMain" type="button" class="whitespace-nowrap rounded bg-main-300 px-6 py-2 text-center text-white">
+                    Rəy bildirin
+                </button>
+            </section>
+            <div class="mt-14 grid grid-cols-2 gap-16 pb-20 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-sm font-semibold uppercase leading-5 tracking-wider text-gray-400">
+                        Elektron H&#246;kumət
+                    </h2>
+                    <ul class="flex flex-col gap-4">
+                        <li>
+                            <a href="/az/content/read/2" target="_blank" class="leading-6 text-gray-500">
+                                &#220;mumi məlumat
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/az/content/read/7" target="_blank" class="leading-6 text-gray-500">
+                                Xidmət təminat&#231;ıları
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/az/content/read/44" target="_blank" class="leading-6 text-gray-500">
+                                Təlimatlar
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-sm font-semibold uppercase leading-5 tracking-wider text-gray-400">
+                        Reyestr və aktlar
+                    </h2>
+                    <ul class="flex flex-col gap-4">
+                        <li>
+                            <a href="/az/content/read/13" target="_blank" class="leading-6 text-gray-500">
+                                D&#246;vlət Xidmətlərinin Elektron Reyestri
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/az/content/read/12" target="_blank" class="leading-6 text-gray-500">
+                                D&#246;vlət İnformasiya Ehtiyatları və Sistemləri Reyestri
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-sm font-semibold uppercase leading-5 tracking-wider text-gray-400">
+                        Giriş n&#246;vləri
+                    </h2>
+                    <ul class="flex flex-col gap-4">
+                        <li>
+                            <a href="/az/content/read/5" target="_blank" class="leading-6 text-gray-500">
+                                E-İmza
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/az/content/read/217" target="_blank" class="leading-6 text-gray-500">
+                                Asan imza
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-sm font-semibold uppercase leading-5 tracking-wider text-gray-400">
+                        Sənədlər
+                    </h2>
+                    <ul class="flex flex-col gap-4">
+                        <li>
+                            <a href="/az/content/read/25" target="_blank" class="leading-6 text-gray-500">
+                                Qanunvericilik
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/az/content/read/37" target="_blank" class="leading-6 text-gray-500">
+                                H&#252;quqi sənədlər
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-span-2 row-start-1 flex flex-col gap-4 sm:col-span-1 sm:row-start-auto">
+                    <h2 class="text-sm font-semibold uppercase leading-5 tracking-wider text-gray-400">
+                        Dil
+                    </h2>
+                    <label for="language" class="sr-only">Dil</label>
+                    <select id="languageSelect" name="language"
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                        <option id="languageOptionAz" value="/az/" >
+                            Azərbaycan dili
+                        </option>
+                        <option id="languageOptionEn" value="/en/" >
+                            English
+                        </option>
+                    </select>
+
+                    </div>
+                </div>
+
+                <div class="flex flex-col-reverse items-center justify-between gap-4 border-t py-6 xl:flex-row">
+                    <p class="text-sm leading-6 tracking-wider text-gray-400 sm:text-base footer-company">
+                        
+
+                        “İnnovasiya və Rəqəmsal İnkişaf Agentliyi” Publik H&#252;quqi Şəxsi
+                    </p>
+
+
+                    <div class="flex flex-col items-center gap-3.5 xl:flex-row">
+
+					<ul class="flex flex-wrap items-center justify-center gap-3">
+                            <li class="flex items-center gap-3 rounded-lg border border-gray-300 px-3 py-1.5 leading-6 text-main">
+                                <span id="new-users" class="text-sm font-bold"></span>
+                                <span class="text-xs">Yeni ziyarət&#231;ilər</span>
+                            </li>
+                            <li class="flex items-center gap-3 rounded-lg border border-gray-300 px-3 py-1.5 leading-6 text-main">
+                                <span id="screen-page-view" class="text-sm font-bold"></span>
+                                <span class="text-xs">Səhifə baxış sayı</span>
+                            </li>
+                            <li class="flex items-center gap-3 rounded-lg border border-gray-300 px-3 py-1.5 leading-6 text-main">
+                                <span id="average-session" class="text-sm font-bold"></span>
+                                <span class="text-xs">Orta sərf olunan vaxt</span>
+                            </li>
+                        </ul>
+					
+                        <ul class="flex items-center gap-7">
+                            <li>
+                                <a href="https://www.facebook.com/idda.azerbaijan" target="_blank" class="text-gray-400 hover:text-main">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                              d="M22 12C22 6.477 17.523 2 12 2C6.477 2 2 6.477 2 12C2 16.991 5.657 21.128 10.438 21.878V14.891H7.898V12H10.438V9.797C10.438 7.291 11.93 5.907 14.215 5.907C15.309 5.907 16.453 6.102 16.453 6.102V8.562H15.193C13.95 8.562 13.563 9.333 13.563 10.124V12H16.336L15.893 14.89H13.563V21.878C18.343 21.128 22 16.991 22 12Z"
+                                              fill="currentColor" />
+                                    </svg>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/idda.azerbaijan/" target="_blank" class="text-gray-400 hover:text-main">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                              d="M12.315 2C14.745 2 15.099 2.013 16.123 2.06C17.187 2.109 17.914 2.278 18.55 2.525C19.2175 2.77587 19.8222 3.16936 20.322 3.678C20.8306 4.17777 21.2241 4.7825 21.475 5.45C21.722 6.086 21.891 6.813 21.94 7.877C21.988 8.944 22 9.284 22 12V12.08C22 14.723 21.988 15.067 21.94 16.123C21.891 17.187 21.722 17.914 21.475 18.55C21.2241 19.2175 20.8306 19.8222 20.322 20.322C19.8222 20.8306 19.2175 21.2241 18.55 21.475C17.914 21.722 17.187 21.891 16.123 21.94C15.056 21.988 14.716 22 12 22H11.92C9.277 22 8.933 21.988 7.877 21.94C6.813 21.891 6.086 21.722 5.45 21.475C4.7825 21.2241 4.17777 20.8306 3.678 20.322C3.16936 19.8222 2.77587 19.2175 2.525 18.55C2.278 17.914 2.109 17.187 2.06 16.123C2.013 15.099 2 14.744 2 12.315V11.685C2 9.255 2.013 8.901 2.06 7.877C2.109 6.813 2.278 6.086 2.525 5.45C2.77587 4.7825 3.16936 4.17777 3.678 3.678C4.17777 3.16936 4.7825 2.77587 5.45 2.525C6.086 2.278 6.813 2.109 7.877 2.06C8.901 2.013 9.256 2 11.685 2H12.315ZM12.234 3.802H11.766C9.31 3.802 8.982 3.813 7.959 3.86C6.984 3.905 6.455 4.067 6.102 4.204C5.635 4.386 5.302 4.602 4.952 4.952C4.602 5.302 4.386 5.635 4.204 6.102C4.067 6.455 3.904 6.984 3.86 7.959C3.813 8.982 3.802 9.31 3.802 11.766V12.234C3.802 14.69 3.813 15.018 3.86 16.041C3.905 17.016 4.067 17.545 4.204 17.898C4.386 18.364 4.603 18.698 4.952 19.048C5.302 19.398 5.635 19.614 6.102 19.796C6.455 19.933 6.984 20.096 7.959 20.14C9.013 20.188 9.329 20.198 12 20.198H12.08C14.677 20.198 14.997 20.188 16.04 20.14C17.016 20.095 17.545 19.933 17.898 19.796C18.364 19.614 18.698 19.398 19.048 19.048C19.398 18.698 19.614 18.365 19.796 17.898C19.933 17.545 20.096 17.016 20.14 16.041C20.188 14.986 20.198 14.671 20.198 12V11.92C20.198 9.323 20.188 9.003 20.14 7.96C20.095 6.984 19.933 6.455 19.796 6.102C19.6358 5.66757 19.3802 5.2746 19.048 4.952C18.7254 4.61986 18.3324 4.36426 17.898 4.204C17.545 4.067 17.016 3.904 16.041 3.86C15.018 3.813 14.69 3.802 12.234 3.802ZM12 6.865C12.6743 6.865 13.3421 6.99782 13.9651 7.25588C14.5881 7.51394 15.1542 7.89218 15.631 8.36901C16.1078 8.84584 16.4861 9.41191 16.7441 10.0349C17.0022 10.6579 17.135 11.3257 17.135 12C17.135 12.6743 17.0022 13.3421 16.7441 13.9651C16.4861 14.5881 16.1078 15.1542 15.631 15.631C15.1542 16.1078 14.5881 16.4861 13.9651 16.7441C13.3421 17.0022 12.6743 17.135 12 17.135C10.6381 17.135 9.33201 16.594 8.36901 15.631C7.40601 14.668 6.865 13.3619 6.865 12C6.865 10.6381 7.40601 9.33201 8.36901 8.36901C9.33201 7.40601 10.6381 6.865 12 6.865ZM12 8.667C11.116 8.667 10.2683 9.01815 9.64321 9.64321C9.01815 10.2683 8.667 11.116 8.667 12C8.667 12.884 9.01815 13.7317 9.64321 14.3568C10.2683 14.9818 11.116 15.333 12 15.333C12.884 15.333 13.7317 14.9818 14.3568 14.3568C14.9818 13.7317 15.333 12.884 15.333 12C15.333 11.116 14.9818 10.2683 14.3568 9.64321C13.7317 9.01815 12.884 8.667 12 8.667ZM17.338 5.462C17.6563 5.462 17.9615 5.58843 18.1865 5.81347C18.4116 6.03852 18.538 6.34374 18.538 6.662C18.538 6.98026 18.4116 7.28548 18.1865 7.51053C17.9615 7.73557 17.6563 7.862 17.338 7.862C17.0197 7.862 16.7145 7.73557 16.4895 7.51053C16.2644 7.28548 16.138 6.98026 16.138 6.662C16.138 6.34374 16.2644 6.03852 16.4895 5.81347C16.7145 5.58843 17.0197 5.462 17.338 5.462Z"
+                                              fill="currentColor" />
+                                    </svg>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/idda_azerbaijan" target="_blank" class="text-gray-400 hover:text-main">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.29 20.2534C15.837 20.2534 19.965 14.0004 19.965 8.5784C19.965 8.4004 19.965 8.2234 19.953 8.0484C20.7562 7.46693 21.4493 6.74701 22 5.9224C21.2511 6.2544 20.4566 6.47216 19.643 6.5684C20.4996 6.05546 21.1408 5.24875 21.447 4.2984C20.6417 4.77628 19.7607 5.11313 18.842 5.2944C18.2234 4.63616 17.405 4.20023 16.5136 4.0541C15.6222 3.90797 14.7075 4.0598 13.9111 4.48607C13.1147 4.91234 12.4811 5.58927 12.1083 6.41206C11.7355 7.23485 11.6444 8.15758 11.849 9.0374C10.2176 8.95564 8.6216 8.53172 7.16465 7.79317C5.70769 7.05461 4.42233 6.01792 3.392 4.7504C2.86732 5.6536 2.70659 6.72282 2.94254 7.74036C3.17848 8.75791 3.79337 9.64728 4.662 10.2274C4.00926 10.2085 3.37063 10.0329 2.8 9.7154V9.7674C2.80039 10.7147 3.1284 11.6327 3.7284 12.3658C4.3284 13.0988 5.16347 13.6018 6.092 13.7894C5.48781 13.9541 4.85389 13.9781 4.239 13.8594C4.50116 14.6749 5.01168 15.388 5.69913 15.899C6.38658 16.41 7.21657 16.6934 8.073 16.7094C7.22212 17.378 6.24779 17.8722 5.20573 18.1639C4.16367 18.4556 3.07432 18.539 2 18.4094C3.8766 19.6137 6.06019 20.2525 8.29 20.2494"
+                                              fill="currentColor" />
+                                    </svg>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="divModalSendMessageMain" tabindex="-1" role="dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="closeModalMain" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Əks əlaqə</h4>
+                        <p style="margin: 0; font-size: 12px;">Xidmətlə əlaqəli irad, təklif və d&#252;ş&#252;ncələrinizi yaza bilərsiniz</p>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger" style="margin: 2px 0 12px 0; padding: 5px 10px; display:none;">
+
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ad, Soyad</label>
+                            <input class="form-control" id="Name" name="Name" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail</label>
+                            <input class="form-control" id="txtMail" name="txtMail" type="email">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefon</label>
+                            <input name="numberInp" class="form-control" id="txtPhone" name="txtPhone" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label>Şərhləriniz/t&#246;vsiyələriniz/şikayətləriniz</label>
+                            <textarea class="form-control" id="Message" name="Message" rows="6" style="background: #f0f0f0;"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="whitespace-nowrap rounded bg-main-300 px-6 py-2 text-center text-white" id="btnSendMessageMain">G&#246;ndər</button>
+                        <img src="/content/images/LoadingStyle.gif" class="imgLoading" style="margin: 3px; display:none;">
+                    </div>
+                </div>
+            </div>
+            <div class="feedback-backdrop" id="feedbackBackdrop"></div>
+        </footer>
+
+
+
+        <script type="text/javascript">
+
+        function numberWithSpace(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        }
+
+
+
+            $(document).ready(function () {
+
+
+            $('input[name=numberInp]').mask('(000) 000-00-00')
+
+            $("#goMain,#infoGoMain").click(function () {
+                $("#divModalSendMessageMain .alert-danger").text('');
+                $("#divModalSendMessageMain .alert-danger").hide();
+                FeedBackOnBegin();
+                $("#divModalSendMessageMain").addClass("in");
+                $("#feedbackBackdrop").addClass("in");
+            });
+
+            $('#closeModalMain').click(function () {
+                closeFeedback()
+            })
+            $('#feedbackBackdrop').click(function () {
+                closeFeedback()
+            })
+
+            function closeFeedback() {
+                $("#divModalSendMessageMain").removeClass("in");
+                $("#feedbackBackdrop").removeClass("in");
+            }
+
+                $("#btnSendMessageMain").click(function () {
+                var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if (!regex.test($("#txtMail").val())) {
+                    $("#divModalSendMessageMain .alert-danger").text('Email adresi doğru deyil');
+                    $("#divModalSendMessageMain .alert-danger").show();
+                } else {
+                    $(this).hide();
+                    $(this).closest("div").find(".imgLoading").show();
+                    grecaptcha.enterprise.ready(function () {
+                        grecaptcha.enterprise.execute('6LdXqlgmAAAAADHjTU2ZE1fK8w-NZ-Wjv4o2VSZo', { action: 'Feedback' }).then(function (token) {
+                            $.ajax({
+                                url: "/az//Feedback/Add",
+                                type: 'POST',
+                                dataType: 'json',
+                                headers: {
+                                    "Captcha": token
+                                },
+                                data:
+                                {
+                                    Name: $("#Name").val(),
+                                    Message: $("#Message").val(),
+                                    txtMail: $("#txtMail").val(),
+                                    txtPhone: $("#txtPhone").val()
+                                },
+                                success: function (result) {
+                                    if (result.message == "OK") {
+                                        $("#btnSendMessageMain").show();
+                                        $("#btnSendMessageMain").closest("div").find(".imgLoading").hide();
+                                        $("#divModalSendMessageMain").removeClass("in");
+                                        $("#feedbackBackdrop").removeClass("in");
+
+                                        $.toast({
+                                            heading: 'Məlumat',
+                                            text: 'Müraciətiniz göndərildi',
+                                            icon: 'success',
+                                            loader: true,        // Change it to false to disable loader
+                                            loaderBg: '#9EC600',  // To change the background
+                                            position: 'top-right'
+                                        })
+                                    }
+
+                                    else {
+                                        $("#btnSendMessageMain").show();
+                                        $("#btnSendMessageMain").closest("div").find(".imgLoading").hide();
+
+                                        $("#divModalSendMessageMain .alert-danger").text(result.message);
+                                        $("#divModalSendMessageMain .alert-danger").show();
+                                    }
+                                }
+                            });
+                        });
+                    });
+                }
+
+            });
+
+
+
+
+            var serviceMessageLength = $("#errorFrame").text().trim().length;
+
+            $("#errorFrame").hide();
+
+            var serviceMessageShowed = false;
+            if (serviceMessageLength != 0) {
+                $("#ServiceScreen").hide();
+                $("#ServiceLoading").hide();
+
+                $("#errorFrame").show();
+                serviceMessageShowed = true;
+            }
+
+            
+
+            
+
+        });
+
+
+
+        function LoadingSuccess() {
+            $("#ServiceLoading").hide();
+            $("#ServiceHttpError").hide();
+            $("#errorFrame").hide();
+
+            //document.getElementById("ServiceLoading").style.display = 'none';
+            //document.getElementById("ServiceHttpError").style.display = 'none';
+        }
+
+        function FeedBackOnSucces() {
+            if (document.getElementById("ErrorMsg").innerHTML.length < 3) {
+                document.getElementById("FrmFeedBack").style.display = 'none';
+                document.getElementById("PnlSucces").style.display = 'block';
+            }
+        }
+
+        function FeedBackOnBegin() {
+            document.getElementById("Message").value = "";
+
+            var nameInp = document.getElementById("Name");
+
+
+
+            if (
+               false
+            ) {
+                nameInp.disabled = true
+            }
+            nameInp.value = ""
+            document.getElementById("txtPhone").value = "";
+            document.getElementById("txtMail").value = "";
+
+
+        }
+
+        </script>
+    </main>
+
+
+
+
+
+
+
+
+
+
+    <!-- Google Tag Manager (noscript) -->
+
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PFXVJD4"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+
+
+    <script>(function (d) { var s = d.createElement("script"); s.setAttribute("data-account", "mLnnKDiAIy"); s.setAttribute("src", "https://cdn.userway.org/widget.js"); (d.body || d.head).appendChild(s); })(document)</script><noscript>Please ensure Javascript is enabled for purposes of <a href="https://userway.org">website accessibility</a></noscript>
+
+
+
+
+    <script>
+    var langScript = 'az';
+    </script>
+    <script src="/ContentNew/Js/custom.js"></script>
+
+
+    <script>
+
+
+    function ShowCertificateAlertDialog() {
+        if ($.cookie('CertificateAlertDialog') != null && $.cookie('CertificateAlertDialog') == 'true') {
+            $.cookie('CertificateAlertDialog', 'false', { path: '/' });
+            BootstrapDialog.show({
+                type: BootstrapDialog.TYPE_PRIMARY,
+                closeByBackdrop: false,
+                closeByKeyboard: false,
+                title: 'Məlumat',
+                message: 'Hörmətli istifadəçi, sizin "" sertifikatınızın etibarlılıq müddəti <span style="color:red; font-weight: bold;"></span> tarixində bitir',
+                buttons: [{
+                    label: 'Bağla',
+                    action: function (dialogItself) {
+                        dialogItself.close();
+                    }
+                }]
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        ShowCertificateAlertDialog();
+    });
+    </script>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-35394285-3', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LdXqlgmAAAAADHjTU2ZE1fK8w-NZ-Wjv4o2VSZo"></script>
+</body>
+</html>
